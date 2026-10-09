@@ -1,0 +1,208 @@
+{
+  "listNote": "Statuses and codes are carried over from the earlier version of this tool and have NOT been verified against official BEE / CCTS documents. Every entry is marked VERIFY until a person checks it and fills lastVerified.",
+  "officialSourceUrl": "https://beeindia.gov.in/",
+  "entries": [
+    {
+      "id": "manure",
+      "code": "BM AG04.001",
+      "activity": "manure",
+      "name": {
+        "en": "Methane recovery from livestock manure at households and small farms",
+        "hi": "घरों और छोटे खेतों में पशुओं के गोबर से मीथेन की प्राप्ति",
+        "gu": "ઘરો અને નાના ખેતરોમાં પશુઓના છાણમાંથી મિથેન પ્રાપ્તિ"
+      },
+      "status": "approved",
+      "statusVerified": false,
+      "lastVerified": null,
+      "sourceUrl": "https://beeindia.gov.in/",
+      "conditions": [
+        {
+          "metric": "cattleBuffalo",
+          "op": ">=",
+          "value": 500,
+          "label": {
+            "en": "At least 500 cattle and buffalo together",
+            "hi": "कम से कम 500 गाय-भैंस मिलाकर",
+            "gu": "ઓછામાં ઓછા 500 ગાય-ભેંસ મળીને"
+          },
+          "basis": "Screening threshold used by this tool (assumption), not a methodology rule."
+        },
+        {
+          "metric": "households",
+          "op": ">=",
+          "value": 100,
+          "label": {
+            "en": "At least 100 households keeping animals",
+            "hi": "कम से कम 100 परिवार जो पशु रखते हैं",
+            "gu": "ઓછામાં ઓછા 100 પરિવાર જે પશુ રાખે છે"
+          },
+          "basis": "Screening threshold used by this tool (assumption)."
+        }
+      ]
+    },
+    {
+      "id": "afforestation",
+      "code": "BM FR05.002",
+      "activity": "agroforestry",
+      "name": {
+        "en": "Afforestation and reforestation of land other than wetlands",
+        "hi": "आर्द्रभूमि के अलावा भूमि पर वनीकरण और पुनर्वनीकरण",
+        "gu": "ભીની જમીન સિવાયની જમીન પર વનીકરણ અને પુનઃવનીકરણ"
+      },
+      "status": "approved",
+      "statusVerified": false,
+      "lastVerified": null,
+      "sourceUrl": "https://beeindia.gov.in/",
+      "note": "The earlier version of this tool contradicted itself here: one file listed tree planting as approved, another as not yet notified. Confirm which is current.",
+      "conditions": [
+        {
+          "metric": "commonPlusDegradedHa",
+          "op": ">=",
+          "value": 5,
+          "label": {
+            "en": "At least 5 ha of common or degraded land to plant",
+            "hi": "रोपण के लिए कम से कम 5 हेक्टेयर साझा या बंजर भूमि",
+            "gu": "વાવેતર માટે ઓછામાં ઓછી 5 હેક્ટર સામૂહિક અથવા પડતર જમીન"
+          },
+          "basis": "Screening threshold used by this tool (assumption)."
+        },
+        {
+          "metric": "degradedHa",
+          "op": ">=",
+          "value": 20,
+          "label": {
+            "en": "At least 20 ha of degraded land (new planting, not existing forest)",
+            "hi": "कम से कम 20 हेक्टेयर बंजर भूमि (नया रोपण, मौजूदा जंगल नहीं)",
+            "gu": "ઓછામાં ઓછી 20 હેક્ટર પડતર જમીન (નવું વાવેતર, હાલનું જંગલ નહીં)"
+          },
+          "basis": "Screening proxy for additionality (assumption)."
+        }
+      ]
+    },
+    {
+      "id": "soil-carbon",
+      "code": "—",
+      "activity": "soil",
+      "name": {
+        "en": "Soil organic carbon on cropland",
+        "hi": "खेती की ज़मीन पर मिट्टी का जैविक कार्बन",
+        "gu": "ખેતીની જમીન પર માટીનો જૈવિક કાર્બન"
+      },
+      "status": "proposed",
+      "statusVerified": false,
+      "lastVerified": null,
+      "sourceUrl": "https://beeindia.gov.in/",
+      "conditions": [
+        {
+          "metric": "croplandHa",
+          "op": ">=",
+          "value": 50,
+          "label": {
+            "en": "At least 50 ha of cropland",
+            "hi": "कम से कम 50 हेक्टेयर खेती की ज़मीन",
+            "gu": "ઓછામાં ઓછી 50 હેક્ટર ખેતીની જમીન"
+          },
+          "basis": "Screening threshold used by this tool (assumption)."
+        },
+        {
+          "metric": "socTCHa",
+          "op": "<",
+          "value": 20,
+          "label": {
+            "en": "Soil carbon low enough to have room to grow (under 20 t C/ha)",
+            "hi": "मिट्टी में कार्बन इतना कम कि बढ़ने की गुंजाइश हो (20 टन C/हे. से कम)",
+            "gu": "માટીમાં કાર્બન એટલો ઓછો કે વધવાની જગ્યા હોય (20 ટન C/હે.થી ઓછો)"
+          },
+          "basis": "Screening threshold used by this tool (assumption)."
+        }
+      ]
+    },
+    {
+      "id": "pasture",
+      "code": "—",
+      "activity": "pasture",
+      "name": {
+        "en": "Regenerating common grazing land",
+        "hi": "साझा चरागाह भूमि का पुनर्जीवन",
+        "gu": "સામૂહિક ચરિયાણ જમીનનું પુનર્જીવન"
+      },
+      "status": "not_yet_notified",
+      "statusVerified": false,
+      "lastVerified": null,
+      "sourceUrl": "https://beeindia.gov.in/",
+      "conditions": [
+        {
+          "metric": "commonLandHa",
+          "op": ">=",
+          "value": 20,
+          "label": {
+            "en": "At least 20 ha of common land under Gram Sabha control",
+            "hi": "ग्राम सभा के नियंत्रण में कम से कम 20 हेक्टेयर साझा भूमि",
+            "gu": "ગ્રામ સભાના નિયંત્રણમાં ઓછામાં ઓછી 20 હેક્ટર સામૂહિક જમીન"
+          },
+          "basis": "Screening threshold used by this tool (assumption)."
+        }
+      ]
+    },
+    {
+      "id": "rice",
+      "code": "BM AG04.002",
+      "activity": null,
+      "name": {
+        "en": "Lower methane from rice through better water management",
+        "hi": "बेहतर जल प्रबंधन से धान में कम मीथेन",
+        "gu": "વધુ સારા પાણી વ્યવસ્થાપનથી ડાંગરમાં ઓછો મિથેન"
+      },
+      "status": "approved",
+      "statusVerified": false,
+      "lastVerified": null,
+      "sourceUrl": "https://beeindia.gov.in/",
+      "needs": {
+        "en": "Paddy area and current water practice. This tool has no rice-area data, so it cannot screen this pathway.",
+        "hi": "धान का क्षेत्र और वर्तमान सिंचाई पद्धति। इस टूल के पास धान क्षेत्र का डेटा नहीं है।",
+        "gu": "ડાંગરનો વિસ્તાર અને હાલની સિંચાઈ પદ્ધતિ. આ સાધન પાસે ડાંગર વિસ્તારનો ડેટા નથી."
+      },
+      "conditions": []
+    },
+    {
+      "id": "cbg",
+      "code": "BM WA03.003",
+      "activity": null,
+      "name": {
+        "en": "Compressed biogas (CBG) production",
+        "hi": "संपीड़ित बायोगैस (CBG) उत्पादन",
+        "gu": "સંકુચિત બાયોગેસ (CBG) ઉત્પાદન"
+      },
+      "status": "approved",
+      "statusVerified": false,
+      "lastVerified": null,
+      "sourceUrl": "https://beeindia.gov.in/",
+      "needs": {
+        "en": "A planned or running CBG plant and its feedstock supply.",
+        "hi": "योजनाबद्ध या चालू CBG संयंत्र और उसका कच्चा माल।",
+        "gu": "આયોજિત અથવા ચાલુ CBG પ્લાન્ટ અને તેનો કાચો માલ."
+      },
+      "conditions": []
+    },
+    {
+      "id": "mangrove",
+      "code": "BM FR05.001",
+      "activity": null,
+      "name": {
+        "en": "Restoring degraded mangroves",
+        "hi": "क्षतिग्रस्त मैंग्रोव की बहाली",
+        "gu": "નુકસાન પામેલા મેન્ગ્રોવની પુનઃસ્થાપના"
+      },
+      "status": "approved",
+      "statusVerified": false,
+      "lastVerified": null,
+      "sourceUrl": "https://beeindia.gov.in/",
+      "needs": {
+        "en": "Coastal villages only: area of degraded mangrove.",
+        "hi": "केवल तटीय गाँव: क्षतिग्रस्त मैंग्रोव का क्षेत्र।",
+        "gu": "માત્ર દરિયાકાંઠાના ગામ: નુકસાન પામેલા મેન્ગ્રોવનો વિસ્તાર."
+      },
+      "conditions": []
+    }
+  ]
+}

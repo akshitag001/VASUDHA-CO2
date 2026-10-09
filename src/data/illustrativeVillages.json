@@ -1,0 +1,113 @@
+{
+  "note": "ILLUSTRATIVE PROFILES — not measured data. These figures were typed in by the original team as approximations for villages in Mandla (MP) and Dahod (GJ). They cannot be traced to a specific table in the datasets named in `statedBasis`. Every value is therefore shown in the app as an Assumption. Replace with real extracts, or let the Gram Panchayat enter its own figures.",
+  "profiles": {
+    "jamgaon": {
+      "statedBasis": {
+        "households": ["Census of India 2011 / SECC household frame", "2011"],
+        "population": ["Census of India 2011", "2011"],
+        "croplandHa": ["Bhuvan LULC cropland class", "2021"],
+        "commonLandHa": ["GP common land register + Forest Dept working plan", "2019"],
+        "degradedHa": ["Bhuvan wasteland atlas", "2019"],
+        "plantationHa": ["MGNREGA plantation works", "2016–2024"],
+        "livestock": ["20th Livestock Census district totals, apportioned by population", "2019"],
+        "socTCHa": ["ISRIC SoilGrids 2.0, 0–30 cm", "2020"]
+      },
+      "values": {
+        "households": 512, "population": 2410,
+        "croplandHa": 540, "commonLandHa": 430, "degradedHa": 150, "plantationHa": 62,
+        "dairyCattle": 180, "indigenousCattle": 640, "buffalo": 210, "goats": 380, "sheep": 60,
+        "socTCHa": 14.8
+      }
+    },
+    "kuknamal": {
+      "statedBasis": {
+        "households": ["Census of India 2011 / SECC", "2011"],
+        "population": ["Census of India 2011", "2011"],
+        "croplandHa": ["Bhuvan LULC cropland class", "2021"],
+        "commonLandHa": ["GP common land register + Forest working plan", "2019"],
+        "degradedHa": ["Bhuvan wasteland atlas", "2019"],
+        "plantationHa": ["MGNREGA plantation works", "2016–2024"],
+        "livestock": ["20th Livestock Census, apportioned by population", "2019"],
+        "socTCHa": ["ISRIC SoilGrids 2.0, 0–30 cm", "2020"]
+      },
+      "values": {
+        "households": 138, "population": 640,
+        "croplandHa": 150, "commonLandHa": 190, "degradedHa": 58, "plantationHa": 12,
+        "dairyCattle": 20, "indigenousCattle": 90, "buffalo": 24, "goats": 70, "sheep": 12,
+        "socTCHa": 13.9
+      }
+    },
+    "bichhiya_rural": {
+      "statedBasis": {
+        "households": ["Census of India 2011 / SECC", "2011"],
+        "population": ["Census of India 2011", "2011"],
+        "croplandHa": ["Bhuvan LULC cropland class", "2021"],
+        "commonLandHa": ["GP common land register + Forest working plan", "2019"],
+        "degradedHa": ["Bhuvan wasteland atlas", "2019"],
+        "plantationHa": ["MGNREGA plantation works", "2016–2024"],
+        "livestock": ["20th Livestock Census, apportioned by population", "2019"],
+        "socTCHa": ["ISRIC SoilGrids 2.0, 0–30 cm", "2020"]
+      },
+      "values": {
+        "households": 324, "population": 1520,
+        "croplandHa": 360, "commonLandHa": 250, "degradedHa": 92, "plantationHa": 34,
+        "dairyCattle": 110, "indigenousCattle": 400, "buffalo": 130, "goats": 240, "sheep": 36,
+        "socTCHa": 15.2
+      }
+    },
+    "sukhsar": {
+      "statedBasis": {
+        "households": ["Census of India 2011 / SECC", "2011"],
+        "population": ["Census of India 2011", "2011"],
+        "croplandHa": ["Bhuvan LULC cropland class", "2021"],
+        "commonLandHa": ["GP common land register + Forest working plan", "2019"],
+        "degradedHa": ["Bhuvan wasteland atlas", "2019"],
+        "plantationHa": ["MGNREGA plantation works + farm forestry", "2016–2024"],
+        "livestock": ["20th Livestock Census, apportioned by population", "2019"],
+        "socTCHa": ["ISRIC SoilGrids 2.0, 0–30 cm", "2020"]
+      },
+      "values": {
+        "households": 648, "population": 3120,
+        "croplandHa": 680, "commonLandHa": 360, "degradedHa": 140, "plantationHa": 71,
+        "dairyCattle": 240, "indigenousCattle": 560, "buffalo": 320, "goats": 410, "sheep": 40,
+        "socTCHa": 11.4
+      }
+    },
+    "chosala": {
+      "statedBasis": {
+        "households": ["Census of India 2011 / SECC", "2011"],
+        "population": ["Census of India 2011", "2011"],
+        "croplandHa": ["Bhuvan LULC cropland class", "2021"],
+        "commonLandHa": ["GP common land register", "2019"],
+        "degradedHa": ["Bhuvan wasteland atlas", "2019"],
+        "plantationHa": ["MGNREGA plantation works", "2016–2024"],
+        "livestock": ["20th Livestock Census, apportioned by population", "2019"],
+        "socTCHa": ["ISRIC SoilGrids 2.0, 0–30 cm", "2020"]
+      },
+      "values": {
+        "households": 312, "population": 1490,
+        "croplandHa": 330, "commonLandHa": 180, "degradedHa": 74, "plantationHa": 40,
+        "dairyCattle": 120, "indigenousCattle": 300, "buffalo": 160, "goats": 220, "sheep": 24,
+        "socTCHa": 11.8
+      }
+    },
+    "zalod_rural": {
+      "statedBasis": {
+        "households": ["Census of India 2011 / SECC", "2011"],
+        "population": ["Census of India 2011", "2011"],
+        "croplandHa": ["Bhuvan LULC cropland class", "2021"],
+        "commonLandHa": ["GP common land register", "2019"],
+        "degradedHa": ["Bhuvan wasteland atlas", "2019"],
+        "plantationHa": ["MGNREGA plantation works", "2016–2024"],
+        "livestock": ["20th Livestock Census, apportioned by population", "2019"],
+        "socTCHa": ["ISRIC SoilGrids 2.0, 0–30 cm", "2020"]
+      },
+      "values": {
+        "households": 534, "population": 2560,
+        "croplandHa": 560, "commonLandHa": 240, "degradedHa": 105, "plantationHa": 58,
+        "dairyCattle": 200, "indigenousCattle": 470, "buffalo": 260, "goats": 340, "sheep": 32,
+        "socTCHa": 11.1
+      }
+    }
+  }
+}

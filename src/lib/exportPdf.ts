@@ -1,60 +1,26 @@
-// Real client-side PDF export for the Gram Sabha Decision Brief.
-//
-// Renders the actual on-screen DOM node via html2canvas (not jsPDF's native
-// text API) specifically because the brief must render Devanagari and
-// Gujarati script correctly — html2canvas rasterises whatever the browser
-// already shapes on screen using the loaded Noto Sans Devanagari / Gujarati
-// webfonts (see index.html), which is far more reliable than re-embedding
-// those fonts into jsPDF's own text layer. The trade-off (a raster image,
-// not selectable text) is acceptable for a one-page printable brief.
-//
-// Guardrail: this never claims to issue, verify, trade, or register anything —
-// it exports exactly what's on screen, including the disclaimer footer.
+// Image-based PDF of the brief, for browsers where "Print → Save as PDF" is awkward.
+// html2canvas and jsPDF are loaded only when the button is pressed.
+// html2canvas rasterises the page as the browser shapes it, so Devanagari and
+// Gujarati conjuncts come out right as long as the web fonts have loaded and no
+// letter-spacing is applied (letter-spacing makes html2canvas draw glyph by glyph).
 
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
-export interface ExportPdfOptions {
-  filename: string;
-}
-
-export async function exportElementToPdf(element: HTMLElement, options: ExportPdfOptions): Promise<void> {
-  const canvas = await html2canvas(element, {
-    scale: 2, // sharp enough to read Devanagari/Gujarati conjuncts at arm's length
-    useCORS: true,
-    backgroundColor: '#ffffff',
-    windowWidth: element.scrollWidth,
-    windowHeight: element.scrollHeight,
-  });
-
-  const imgData = canvas.toDataURL('image/jpeg', 0.92);
-
-  // A4 in points: 595.28 x 841.89
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-
-  const imgWidth = pageWidth;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-  if (imgHeight <= pageHeight) {
-    // Fits on one A4 page — the required outcome for this brief.
-    const yOffset = 0;
-    pdf.addImage(imgData, 'JPEG', 0, yOffset, imgWidth, imgHeight);
+export async function exportElementToPdf(el: HTMLElement, filename: string): Promise<void> {
+  await document.fonts.ready
+  const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import('html2canvas'), import('jspdf')])
+  const canvas = await html2canvas(el, { scale: 2, backgroundColor: '#ffffff', useCORS: true })
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+  const pageW = 210
+  const pageH = 297
+  const margin = 10
+  const w = pageW - margin * 2
+  const h = (canvas.height * w) / canvas.width
+  const img = canvas.toDataURL('image/jpeg', 0.92)
+  if (h <= pageH - margin * 2) {
+    pdf.addImage(img, 'JPEG', margin, margin, w, h)
   } else {
-    // Fallback: content overflowed one page (e.g. very long translated strings) —
-    // paginate rather than silently cropping content a Sarpanch needs to read.
-    let heightLeft = imgHeight;
-    let position = 0;
-    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
+    // Scale down to fit one page rather than splitting text across pages.
+    const scale = (pageH - margin * 2) / h
+    pdf.addImage(img, 'JPEG', margin + (w - w * scale) / 2, margin, w * scale, h * scale)
   }
-
-  pdf.save(options.filename);
+  pdf.save(filename)
 }

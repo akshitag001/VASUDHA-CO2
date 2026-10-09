@@ -1,86 +1,94 @@
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import type { ReactNode } from 'react';
-import { AppProvider, useApp } from './contexts/AppContext';
-import { LangProvider } from './contexts/LangContext';
-import ErrorBoundary from './components/shared/ErrorBoundary';
-import Sidebar from './components/Sidebar/Sidebar';
-import MobileNav from './components/Sidebar/MobileNav';
-import Header from './components/shared/Header';
-import Landing from './pages/Landing';
-import PanchayatSelection from './pages/PanchayatSelection';
-import Dashboard from './pages/Dashboard';
-import Baseline from './pages/Baseline';
-import Methodology from './pages/Methodology';
-import Viability from './pages/Viability';
-import Aggregation from './pages/Aggregation';
-import CCTSReadiness from './pages/CCTSReadiness';
-import DecisionPack from './pages/DecisionPack';
-import DataSources from './pages/DataSources';
-import About from './pages/About';
-import UserManual from './pages/UserManual';
-import Assumptions from './pages/Assumptions';
+import { lazy, Suspense, type ReactNode } from 'react'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { AppProvider, useApp } from './state/AppState'
+import ErrorBoundary from './ui/ErrorBoundary'
+import Layout, { RequireVillage } from './ui/Layout'
+import Landing from './pages/Landing'
 
-// Guards any route that requires a selected village — refresh with no state,
-// or a direct link, sends the visitor to /select instead of rendering a blank
-// or crashing dashboard.
-function RequireVillage({ children }: { children: ReactNode }) {
-  const { panchayat } = useApp();
-  if (!panchayat) return <Navigate to="/select" replace />;
-  return <>{children}</>;
-}
+// Every page except the landing page is code-split so the first load stays small.
+const Select = lazy(() => import('./pages/Select'))
+const Overview = lazy(() => import('./pages/Overview'))
+const Carbon = lazy(() => import('./pages/Carbon'))
+const Methodology = lazy(() => import('./pages/Methodology'))
+const Money = lazy(() => import('./pages/Money'))
+const Offer = lazy(() => import('./pages/Offer'))
+const Pooling = lazy(() => import('./pages/Pooling'))
+const Readiness = lazy(() => import('./pages/Readiness'))
+const Brief = lazy(() => import('./pages/Brief'))
+const Assumptions = lazy(() => import('./pages/Assumptions'))
+const DataSources = lazy(() => import('./pages/DataSources'))
+const Guide = lazy(() => import('./pages/Guide'))
+const About = lazy(() => import('./pages/About'))
 
-function AppLayout() {
-  const location = useLocation();
-  const { sidebarOpen } = useApp();
-  const isLanding = location.pathname === '/';
-  const isSelect = location.pathname === '/select';
-
-  if (isLanding || isSelect) {
-    return (
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/select" element={<PanchayatSelection />} />
-      </Routes>
-    );
-  }
-
+function Loading() {
+  const { t } = useApp()
   return (
-    <div className="min-h-screen bg-surface">
-      <Sidebar />
-      <div className={`transition-all duration-200 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'}`}>
-        <Header />
-        <main className="p-4 lg:p-6 max-w-7xl mx-auto pb-20 lg:pb-6">
-          <Routes>
-            <Route path="/dashboard" element={<RequireVillage><Dashboard /></RequireVillage>} />
-            <Route path="/baseline" element={<RequireVillage><Baseline /></RequireVillage>} />
-            <Route path="/methodology" element={<RequireVillage><Methodology /></RequireVillage>} />
-            <Route path="/viability" element={<RequireVillage><Viability /></RequireVillage>} />
-            <Route path="/aggregation" element={<RequireVillage><Aggregation /></RequireVillage>} />
-            <Route path="/readiness" element={<RequireVillage><CCTSReadiness /></RequireVillage>} />
-            <Route path="/decision" element={<RequireVillage><DecisionPack /></RequireVillage>} />
-            <Route path="/assumptions" element={<Assumptions />} />
-            <Route path="/data-sources" element={<DataSources />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/manual" element={<UserManual />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
-        <MobileNav />
-      </div>
-    </div>
-  );
+    <p className="muted py-10" role="status">
+      {t('app.loading')}
+    </p>
+  )
 }
+
+function PageBoundary({ children }: { children: ReactNode }) {
+  const { t } = useApp()
+  return (
+    <ErrorBoundary
+      fallback={(reset) => (
+        <div className="alarm" role="alert">
+          <p className="font-semibold">{t('app.error')}</p>
+          <p className="mb-3">{t('app.errorBody')}</p>
+          <button type="button" className="btn" onClick={reset}>
+            {t('app.reload')}
+          </button>
+        </div>
+      )}
+    >
+      <Suspense fallback={<Loading />}>{children}</Suspense>
+    </ErrorBoundary>
+  )
+}
+
+const guarded = (el: ReactNode) => (
+  <RequireVillage>
+    <PageBoundary>{el}</PageBoundary>
+  </RequireVillage>
+)
+const open = (el: ReactNode) => <PageBoundary>{el}</PageBoundary>
 
 export default function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <LangProvider>
-          <AppProvider>
-            <AppLayout />
-          </AppProvider>
-        </LangProvider>
+        <AppProvider>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/select" element={open(<Select />)} />
+            <Route element={<Layout />}>
+              <Route path="/overview" element={guarded(<Overview />)} />
+              <Route path="/carbon" element={guarded(<Carbon />)} />
+              <Route path="/methodology" element={guarded(<Methodology />)} />
+              <Route path="/money" element={guarded(<Money />)} />
+              <Route path="/offer" element={guarded(<Offer />)} />
+              <Route path="/pooling" element={guarded(<Pooling />)} />
+              <Route path="/readiness" element={guarded(<Readiness />)} />
+              <Route path="/brief" element={guarded(<Brief />)} />
+              <Route path="/assumptions" element={open(<Assumptions />)} />
+              <Route path="/data" element={open(<DataSources />)} />
+              <Route path="/guide" element={open(<Guide />)} />
+              <Route path="/about" element={open(<About />)} />
+            </Route>
+            {/* old routes from the previous version */}
+            <Route path="/dashboard" element={<Navigate to="/overview" replace />} />
+            <Route path="/baseline" element={<Navigate to="/carbon" replace />} />
+            <Route path="/viability" element={<Navigate to="/money" replace />} />
+            <Route path="/aggregation" element={<Navigate to="/pooling" replace />} />
+            <Route path="/decision" element={<Navigate to="/brief" replace />} />
+            <Route path="/data-sources" element={<Navigate to="/data" replace />} />
+            <Route path="/manual" element={<Navigate to="/guide" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AppProvider>
       </BrowserRouter>
     </ErrorBoundary>
-  );
+  )
 }

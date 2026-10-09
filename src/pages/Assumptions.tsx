@@ -1,116 +1,143 @@
-import { useNavigate } from 'react-router-dom';
-import { SlidersHorizontal, ArrowLeft } from 'lucide-react';
-import {
-  CARBON_PRICE_INR, AGGREGATOR_MARGIN, MRV_COSTS, CONTRACT, BIOMASS, LIVESTOCK, SOIL, UNCERTAINTY, CLUSTERING, DISCLAIMER,
-} from '../lib/config';
-import { METHODOLOGY_LIST_UPDATED } from '../data/engine/methodologies';
-import Disclaimer from '../components/shared/Disclaimer';
+import { ASSUMPTIONS, REGIONAL_DEFAULTS, type Assumption, type AssumptionGroup } from '../config/assumptions'
+import type { TKey } from '../i18n'
+import { num } from '../lib/format'
+import { METHODOLOGIES, METHODOLOGY_NOTE } from '../model/analysis'
+import { useApp } from '../state/AppState'
+import { PageHeader } from '../ui/bits'
 
-// Judge-facing transparency panel (Rule 9): every constant the engine uses,
-// rendered live from lib/config.ts — never hardcoded here. If config.ts
-// changes, this page changes automatically, so it cannot drift out of sync.
+const GROUPS: AssumptionGroup[] = ['market', 'cost', 'carbon', 'adoption', 'pooling', 'benchmark']
 
-function RangeRow({ label, r }: { label: string; r: { low: number; mid: number; high: number; unit: string; source: string } }) {
-  return (
-    <div className="p-3 rounded-md bg-earth-50 border border-sage-200">
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <span className="text-sm font-medium text-charcoal-900">{label}</span>
-        <span className="text-sm font-bold text-forest-800">
-          {r.low.toLocaleString('en-IN')} – {r.mid.toLocaleString('en-IN')} – {r.high.toLocaleString('en-IN')} <span className="text-xs font-normal text-charcoal-600">{r.unit}</span>
-        </span>
-      </div>
-      <p className="text-xs text-charcoal-600 mt-1">{r.source}</p>
-    </div>
-  );
-}
+const show = (a: Assumption, v: number) => (a.unit.includes('fraction') ? `${num(v * 100)}%` : num(v, 2))
 
 export default function Assumptions() {
-  const navigate = useNavigate();
-
+  const { t, lang } = useApp()
+  const all = Object.values(ASSUMPTIONS) as Assumption[]
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-xl font-bold text-charcoal-900 flex items-center gap-2">
-          <SlidersHorizontal size={20} className="text-forest-700" />
-          Assumptions &amp; Constants
-        </h1>
-        <p className="text-sm text-charcoal-600 mt-1">
-          Every financial and scientific constant the engine uses, with its source. Nothing on this page
-          is hardcoded elsewhere — it is rendered live from <code className="text-xs bg-earth-100 px-1 rounded">src/lib/config.ts</code>.
+    <article>
+      <PageHeader kicker={t('asm.kicker')} title={t('asm.title')} lede={t('asm.lede')} />
+      {GROUPS.map((g) => (
+        <section key={g} className="section">
+          <h2 className="section-title mb-3">{t(`asm.g.${g}` as TKey)}</h2>
+          <div className="table-wrap">
+            <table className="ledger" lang="en">
+              <thead>
+                <tr>
+                  <th scope="col">{t('asm.colItem')}</th>
+                  <th scope="col" className="amt">
+                    {t('asm.colValue')}
+                  </th>
+                  <th scope="col" className="amt">
+                    {t('asm.colRange')}
+                  </th>
+                  <th scope="col">{t('asm.colSource')}</th>
+                  <th scope="col">{t('asm.colConf')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {all
+                  .filter((a) => a.group === g)
+                  .map((a) => (
+                    <tr key={a.id}>
+                      <th scope="row" className="font-semibold">
+                        {a.label}
+                        <span className="block small muted font-normal">{a.unit}</span>
+                        <code className="small">{a.id}</code>
+                      </th>
+                      <td className="amt">{show(a, a.value)}</td>
+                      <td className="amt">{a.low === a.high ? '—' : `${show(a, a.low)} – ${show(a, a.high)}`}</td>
+                      <td className="small" style={{ minWidth: '16rem' }}>
+                        {a.source} <span className="muted">({a.year})</span>
+                        {a.url && (
+                          <>
+                            {' '}
+                            <a href={a.url} target="_blank" rel="noreferrer">
+                              ↗
+                            </a>
+                          </>
+                        )}
+                        {a.note && <span className="block muted mt-1">{a.note}</span>}
+                      </td>
+                      <td className="whitespace-nowrap">
+                        <span className="small">{t(`conf.${a.confidence}` as TKey)}</span>{' '}
+                        {!a.verified && (
+                          <span className="verify" title={t('prov.verifyTip')}>
+                            {t('prov.verify')}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ))}
+
+      <section className="section">
+        <h2 className="section-title mb-2">{t('asm.placeholderTitle')}</h2>
+        <p className="text-ink-2 mb-3" lang="en">
+          {REGIONAL_DEFAULTS.source}
         </p>
-      </div>
-
-      <Disclaimer message={DISCLAIMER} />
-
-      <div className="card">
-        <h3 className="font-semibold text-sm text-charcoal-900 mb-3">Carbon price &amp; aggregator economics</h3>
-        <div className="space-y-2">
-          <RangeRow label="Carbon price" r={CARBON_PRICE_INR} />
-          <RangeRow label="Aggregator margin" r={{ ...AGGREGATOR_MARGIN, low: AGGREGATOR_MARGIN.low * 100, mid: AGGREGATOR_MARGIN.mid * 100, high: AGGREGATOR_MARGIN.high * 100, unit: '% of gross' }} />
+        <div className="table-wrap">
+          <table className="ledger" lang="en">
+            <thead>
+              <tr>
+                <th scope="col">Region</th>
+                <th scope="col" className="amt">
+                  Cropland
+                </th>
+                <th scope="col" className="amt">
+                  Common
+                </th>
+                <th scope="col" className="amt">
+                  Degraded
+                </th>
+                <th scope="col" className="amt">
+                  SOC t C/ha
+                </th>
+                <th scope="col">Cattle / buffalo / goats / sheep per 1,000 people</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.values(REGIONAL_DEFAULTS.regions).map((r) => (
+                <tr key={r.label}>
+                  <th scope="row" className="font-normal">
+                    {r.label}
+                    <span className="block small muted">{r.states.join(', ')}</span>
+                  </th>
+                  <td className="amt">{num(r.cropShare * 100)}%</td>
+                  <td className="amt">{num(r.commonShare * 100)}%</td>
+                  <td className="amt">{num(r.degradedShare * 100)}%</td>
+                  <td className="amt">{r.socTCHa}</td>
+                  <td className="small">
+                    {r.livestockPer1000.dairyCattle + r.livestockPer1000.indigenousCattle} / {r.livestockPer1000.buffalo} / {r.livestockPer1000.goats} / {r.livestockPer1000.sheep}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
-
-      <div className="card">
-        <h3 className="font-semibold text-sm text-charcoal-900 mb-3">MRV &amp; registration costs (annualised in the engine)</h3>
-        <div className="space-y-2">
-          <RangeRow label="Validation (one-time, amortised)" r={MRV_COSTS.validation} />
-          <RangeRow label="Verification (per audit cycle)" r={MRV_COSTS.verificationPerCycle} />
-          <RangeRow label="Annual monitoring" r={MRV_COSTS.annualMonitoring} />
-          <RangeRow label="Registration (one-time, amortised)" r={MRV_COSTS.registration} />
-        </div>
-        <p className="text-xs text-charcoal-500 mt-2">
-          Contract duration used for amortisation: {CONTRACT.defaultDurationYears} years (range {CONTRACT.minDurationYears}–{CONTRACT.maxDurationYears}).
-          Verification cycle: every {CONTRACT.verificationCycleYears} years.
+        <p className="small muted mt-2" lang="en">
+          Village of {num(REGIONAL_DEFAULTS.population)} people, {num(REGIONAL_DEFAULTS.households)} households, {num(REGIONAL_DEFAULTS.totalHa)} ha.
         </p>
-      </div>
+      </section>
 
-      <div className="card">
-        <h3 className="font-semibold text-sm text-charcoal-900 mb-3">Scientific constants (IPCC Tier 1)</h3>
-        <div className="space-y-2">
-          <RangeRow label="Biomass growth rate" r={BIOMASS.growthRate} />
-          <div className="p-3 rounded-md bg-earth-50 border border-sage-200 text-xs text-charcoal-700">
-            Carbon fraction of dry biomass: <strong>{BIOMASS.carbonFraction}</strong> · CO₂:C conversion: <strong>{BIOMASS.co2ToC.toFixed(3)}</strong> (44/12, molecular weight ratio)
-          </div>
-          <RangeRow label="Livestock manure-management mitigation efficiency" r={LIVESTOCK.mitigationEfficiency} />
-          <div className="p-3 rounded-md bg-earth-50 border border-sage-200 text-xs text-charcoal-700">
-            CH₄ global warming potential (GWP): <strong>{LIVESTOCK.gwpCh4}×</strong> CO₂e (IPCC AR5, 100-yr)
-            <div className="mt-1">
-              Manure CH₄ emission factors (kg/head/yr, IPCC 2006 Vol.4 Ch.10, Indian subcontinent warm climate):{' '}
-              {Object.entries(LIVESTOCK.manureCh4).map(([k, v]) => `${k.replace('_', ' ')}: ${v}`).join(' · ')}
-            </div>
-          </div>
-          <RangeRow label="Annual soil organic carbon delta" r={SOIL.annualSocDelta} />
-        </div>
-      </div>
-
-      <div className="card">
-        <h3 className="font-semibold text-sm text-charcoal-900 mb-3">Uncertainty band &amp; clustering rules</h3>
-        <div className="grid sm:grid-cols-2 gap-3 text-xs text-charcoal-700">
-          <div className="p-3 rounded-md bg-earth-50 border border-sage-200">
-            Default uncertainty: ±{Math.round(UNCERTAINTY.defaultPct * 100)}% around the mid estimate
-            (low = mid × {UNCERTAINTY.lowMult}, high = mid × {UNCERTAINTY.highMult})
-          </div>
-          <div className="p-3 rounded-md bg-earth-50 border border-sage-200">
-            Aggregation: search radius up to {CLUSTERING.maxSearchRadiusKm} km, cluster capped at {CLUSTERING.maxClusterSize} panchayats,
-            requires ≥{CLUSTERING.minOverlapMethodologies} shared eligible methodology
-          </div>
-        </div>
-      </div>
-
-      <div className="card bg-amber-50 border-amber-200">
-        <h3 className="font-semibold text-sm text-charcoal-900 mb-1">Methodology rule set</h3>
-        <p className="text-xs text-charcoal-700">
-          Last updated: <strong>{METHODOLOGY_LIST_UPDATED}</strong>. BEE methodology codes and status shown throughout this
-          tool are illustrative and must be verified against beeindia.gov.in / carbonmarket.gov.in before any
-          decision is made.
+      <section className="section">
+        <h2 className="section-title mb-2">{t('asm.methodologyTitle')}</h2>
+        <p className="alarm small mb-3" lang="en">
+          {METHODOLOGY_NOTE}
         </p>
-      </div>
-
-      <div className="flex justify-between">
-        <button onClick={() => navigate(-1)} className="btn-secondary flex items-center gap-2">
-          <ArrowLeft size={14} /> Back
-        </button>
-      </div>
-    </div>
-  );
+        <ul className="border-t border-ink">
+          {METHODOLOGIES.map((m) => (
+            <li key={m.id} className="border-b border-rule py-2 flex flex-wrap gap-x-3 items-baseline">
+              <span className="figure small">{m.code}</span>
+              <span className="flex-1">{m.name[lang]}</span>
+              <span className="small">{t(`meth.status.${m.status}` as TKey)}</span>
+              <span className="verify">{t('prov.verify')}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </article>
+  )
 }
