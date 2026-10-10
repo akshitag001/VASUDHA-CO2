@@ -1,0 +1,185 @@
+/* ------------------------------------------------------------------
+   VASUDHA CO2 — motion layer (v2)
+   Scroll-linked parallax, drawn dividers, pinned steps, cursor,
+   tilt, footer. Hex/rgba only (html2canvas). Imported by index.css.
+   ------------------------------------------------------------------ */
+@layer components {
+
+/* ------------------------------------------------------------ hero */
+/* While the yellow curtain is up, hold the hero in its start pose; it plays the moment the curtain lifts. */
+.preloading .hero .split-word > span { transform: translateY(105%) !important; }
+.preloading .hero [data-reveal] { opacity: 0 !important; transform: translateY(28px) !important; }
+.preloading .hero-art { opacity: 0 !important; transform: translateY(60px) scale(1.04) !important; }
+
+.hero-art {
+  display: block; width: 100%; height: auto; margin: 0 auto;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent);
+  transition: opacity 1.2s var(--ease-out) 0.2s, transform 1.6s var(--ease-out) 0.2s;
+}
+/* copy drifts up and fades as you scroll away */
+.hero-copy {
+  transform: translate3d(0, calc(var(--sy) * -0.32px), 0);
+  opacity: calc(1 - var(--sy) / 650);
+  will-change: transform, opacity;
+}
+/* blobs follow the pointer (--mx/--my set on .hero) and drift with scroll */
+.hero-blobs {
+  transform: translate3d(calc(var(--mx, 0) * -46px), calc(var(--my, 0) * -36px + var(--sy) * -0.22px), 0);
+  transition: transform 0.9s var(--ease-out);
+}
+.hero-land {
+  transform: translate3d(calc(var(--mx, 0) * 14px), calc(var(--sy) * 0.14px), 0) scale(calc(1 + var(--sy) * 0.00018));
+  transform-origin: 50% 100%;
+  transition: transform 0.9s var(--ease-out);
+}
+.scroll-cue { display: inline-flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.scroll-cue i { display: block; width: 1px; height: 46px; background: var(--color-ink); transform-origin: top; animation: cue 2.2s var(--ease-out) infinite; }
+@keyframes cue { 0% { transform: scaleY(0); transform-origin: top; } 45% { transform: scaleY(1); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+.art { display: block; height: auto; mix-blend-mode: multiply; user-select: none; pointer-events: none; }
+/* A transformed wrapper isolates blending, so the wrapper itself must multiply too (otherwise the paper shows as a pale box). */
+.hero-land, .parallax:has(.art), [data-reveal]:has(> .art) { mix-blend-mode: multiply; }
+@keyframes art-pop { from { opacity: 0; transform: translateY(16px) rotate(-1.5deg); } to { opacity: 1; transform: none; } }
+.art-pop { animation: art-pop 0.8s var(--ease-out) both; }
+
+/* ------------------------------------------------------- scroll text */
+.scroll-text span {
+  opacity: clamp(0.13, calc((var(--prog, 0) * 2.3 - 0.35) * var(--n) - var(--i)), 1);
+  transition: opacity 0.15s linear;
+}
+
+/* ---------------------------------------------------------- dividers */
+.divider { position: relative; height: 60px; margin: 0 auto; max-width: 72rem; padding: 0 1rem; }
+.divider-line { width: 100%; height: 100%; overflow: visible; }
+.divider-line path {
+  fill: none; stroke: var(--color-ink); stroke-width: 1.6; stroke-linecap: round; vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1; stroke-dashoffset: max(0, calc(1 - var(--prog, 0) * 2.4));
+}
+.divider-line path.is-stitch { stroke-dasharray: 0.006 0.008; stroke-dashoffset: 0; opacity: calc(var(--prog, 0) * 3); }
+.divider-emblem {
+  position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 1.15rem;
+  border: 1px solid var(--color-ink); color: var(--color-ink);
+  transform: translate(-50%, -50%) rotate(calc(var(--prog, 0) * 540deg)) scale(clamp(0, calc(var(--prog, 0) * 4 - 0.6), 1));
+}
+
+/* -------------------------------------------------------- pinned steps */
+.hscroll { position: relative; }
+.hscroll-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; flex-direction: column; justify-content: center; gap: 2rem; overflow: hidden; }
+.hscroll-track {
+  display: flex; gap: 1.5rem; width: max-content;
+  padding: 0 max(1rem, calc((100vw - 72rem) / 2));
+  will-change: transform; transform: translate3d(calc(var(--prog, 0) * var(--dist, 0) * -1px), 0, 0);
+}
+.hscroll-panel {
+  flex: 0 0 auto; width: min(82vw, 27rem); height: min(62vh, 33rem);
+  display: flex; flex-direction: column; border-radius: 22px; border: 1px solid var(--color-ink);
+  padding: 1.75rem; position: relative; overflow: hidden;
+}
+.hscroll-panel .art { margin-top: auto; max-height: 52%; width: auto; max-width: 100%; align-self: center; }
+.hscroll-panel .art.gs-crop { width: 100%; height: 48%; max-height: none; object-fit: cover; object-position: right center; }
+.hscroll-bar { height: 3px; background: var(--color-rule); border-radius: 9999px; overflow: hidden; }
+.hscroll-bar > i { display: block; height: 100%; background: var(--color-ink); transform-origin: 0 50%; transform: scaleX(var(--prog, 0)); }
+@media (max-width: 767px) {
+  .hscroll { height: auto !important; }
+  .hscroll-sticky { position: static; height: auto; overflow: visible; padding: 4rem 0; }
+  .hscroll-track { flex-direction: column; width: auto; transform: none; padding: 0 1rem; }
+  .hscroll-panel { width: 100%; height: auto; min-height: 0; }
+  .hscroll-panel .art { max-height: 12rem; margin-top: 1.5rem; }
+  .hscroll-bar { display: none; }
+}
+
+/* ------------------------------------------------------------- tilt */
+.tilt { perspective: 900px; }
+.tilt > * {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.5s var(--ease-out), box-shadow 0.4s var(--ease-out);
+}
+.tilt > *::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 255, 255, 0.5), transparent 50%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.tilt:hover > *::after { opacity: 1; }
+.tilt:hover > * { box-shadow: 8px 10px 0 var(--color-ink); }
+.tilt > .note-card:hover { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-4px); }
+
+/* ------------------------------------------------------------ cursor */
+.cursor-ring {
+  position: fixed; left: 0; top: 0; z-index: 400; pointer-events: none; opacity: 0;
+  width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%;
+  border: 1.5px solid var(--color-ink);
+  transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), margin 0.3s var(--ease-out), background-color 0.3s, border-color 0.3s, opacity 0.3s;
+}
+.cursor-ring.is-hot { width: 64px; height: 64px; margin: -32px 0 0 -32px; background: rgba(255, 233, 92, 0.45); border-color: transparent; mix-blend-mode: multiply; }
+[data-magnetic] { transition: translate 0.35s var(--ease-out), transform 0.25s var(--ease-out), box-shadow 0.25s, color 0.25s; }
+
+/* --------------------------------------------------------- spin badge */
+.spin-badge {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;
+  background: var(--color-yellow); color: var(--color-ink); border: 1px solid var(--color-ink); cursor: pointer; flex-shrink: 0;
+}
+.spin-badge svg { position: absolute; inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); overflow: visible; }
+.spin-badge text { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; fill: var(--color-ink); }
+.spin-badge-core { font-size: 1.4rem; transition: transform 0.4s var(--ease-out); }
+.spin-badge:hover .spin-badge-core { transform: translateY(-4px); }
+
+/* ---------------------------------------------------------- preloader */
+.preloader-leaf { width: clamp(70px, 10vw, 120px); margin-bottom: 1rem; }
+.preloader-leaf path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.4s var(--ease-out) forwards; }
+.preloader-leaf path:nth-child(2) { animation-delay: 0.4s; }
+.preloader-leaf path:nth-child(3) { stroke-dasharray: none; stroke-dashoffset: 0; opacity: 0; animation: fade-in 0.6s ease 0.9s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fade-in { to { opacity: 1; } }
+.logo-mark { transition: transform 0.5s var(--ease-out); }
+.logo:hover .logo-mark { transform: rotate(-12deg) scale(1.06); }
+
+/* ------------------------------------------------------------ footer */
+.mega-cta { display: inline-flex; align-items: center; gap: clamp(0.75rem, 2vw, 1.5rem); color: var(--color-paper); text-decoration: none; }
+.mega-cta:hover { color: var(--color-paper); }
+.mega-cta .mega-arrow {
+  flex-shrink: 0; width: clamp(3.2rem, 7vw, 6rem); height: clamp(3.2rem, 7vw, 6rem); border-radius: 50%;
+  background: var(--color-yellow); color: var(--color-ink); display: inline-flex; align-items: center; justify-content: center;
+  font-size: clamp(1.4rem, 3vw, 2.4rem); transition: transform 0.6s var(--ease-out);
+}
+.mega-cta:hover .mega-arrow { transform: rotate(-45deg) scale(1.08); }
+.mega-cta .mega-text { background: linear-gradient(#ffe95c, #ffe95c) no-repeat 0 96% / 0% 0.1em; transition: background-size 0.6s var(--ease-out); }
+.mega-cta:hover .mega-text { background-size: 100% 0.1em; }
+.fill-word {
+  color: transparent; -webkit-text-stroke: 1.5px var(--color-yellow);
+  background: linear-gradient(to top, #ffe95c calc(var(--prog, 0) * 100%), transparent calc(var(--prog, 0) * 100%));
+  -webkit-background-clip: text; background-clip: text;
+}
+.foot-link { color: var(--color-paper); text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 1.02rem; transition: color 0.2s; }
+.foot-link::before { content: ""; width: 0; height: 2px; background: var(--color-yellow); transition: width 0.35s var(--ease-out); }
+.foot-link:hover { color: var(--color-yellow); }
+.foot-link:hover::before { width: 14px; }
+.foot-col-title { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: #9fb08a; margin-bottom: 1rem; }
+
+/* ----------------------------------------- dashboard: illustrated section rules */
+.section {
+  border-top: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='12' viewBox='0 0 120 12'%3E%3Cpath d='M0 6 C 15 1, 30 11, 45 6 S 75 1, 90 6 S 120 11, 120 6' fill='none' stroke='%23c9c1ab' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x 0 0 / 120px 12px;
+}
+
+/* ------------------------------------------------------ view transitions */
+::view-transition-old(root) { animation: vt-out 0.4s var(--ease-out) both; }
+::view-transition-new(root) { animation: vt-in 0.7s var(--ease-out) both; }
+@keyframes vt-out { to { opacity: 0; transform: translateY(-30px) scale(0.985); } }
+@keyframes vt-in { from { clip-path: inset(100% 0 0 0 round 28px); } to { clip-path: inset(0 0 0 0 round 0); } }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy, .hero-land, .hero-blobs, .hscroll-track, .tilt > * { transform: none !important; opacity: 1 !important; }
+  .scroll-text span { opacity: 1 !important; }
+  .divider-line path { stroke-dashoffset: 0 !important; }
+  .divider-emblem { transform: translate(-50%, -50%) !important; }
+  .cursor-ring { display: none; }
+}
+@media print {
+  .divider, .cursor-ring, .spin-badge { display: none !important; }
+  .scroll-text span { opacity: 1 !important; }
+}

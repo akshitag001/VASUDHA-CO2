@@ -1,0 +1,12 @@
+// Public API of the calculation engine. Pure functions only — no React imports.
+export * from './types'
+export * from './params'
+export * from './carbon'
+export * from './finance'
+export * from './breakeven'
+export * from './sensitivity'
+export * from './pooling'
+export * from './offer'
+export * from './methodology'
+export * from './confidence'
+export * from './verdict'
