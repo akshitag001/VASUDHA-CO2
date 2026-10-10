@@ -80,7 +80,7 @@ Consider **Jamgaon** (*Mandla District, Madhya Pradesh*):
 </td>
 <td width="50%" valign="top">
 
-<img src="public/img/2_Carbon%20in%20your%20land.png" alt="Carbon in your land illustration" width="100%" />
+<img src="public/img/soil-carbon.webp" alt="Carbon in your land illustration" width="100%" />
 
 </td>
 </tr>
@@ -88,7 +88,7 @@ Consider **Jamgaon** (*Mandla District, Madhya Pradesh*):
 <tr>
 <td width="50%" valign="top">
 
-<img src="public/img/1_Find%20your%20village.png" alt="Find your village illustration" width="100%" />
+<img src="public/img/select-corner.webp" alt="Find your village illustration" width="100%" />
 
 </td>
 <td width="50%" valign="top">
@@ -112,7 +112,7 @@ Consider **Jamgaon** (*Mandla District, Madhya Pradesh*):
 </td>
 <td width="50%" valign="top">
 
-<img src="public/img/7_Money%20to%20the%20village.png" alt="Money to the village illustration" width="100%" />
+<img src="public/img/money.webp" alt="Money to the village illustration" width="100%" />
 
 </td>
 </tr>
@@ -120,7 +120,7 @@ Consider **Jamgaon** (*Mandla District, Madhya Pradesh*):
 <tr>
 <td width="50%" valign="top">
 
-<img src="public/img/3_Villages%20pooling%20together.png" alt="Villages pooling together illustration" width="100%" />
+<img src="public/img/pooling.webp" alt="Villages pooling together illustration" width="100%" />
 
 </td>
 <td width="50%" valign="top">
@@ -147,7 +147,7 @@ Consider **Jamgaon** (*Mandla District, Madhya Pradesh*):
 </td>
 <td width="50%" valign="top">
 
-<img src="public/img/4_The%20Gram%20Sabha%20decides.png" alt="The Gram Sabha decides illustration" width="100%" />
+<img src="public/img/gram-sabha.webp" alt="The Gram Sabha decides illustration" width="100%" />
 
 </td>
 </tr>
@@ -155,7 +155,7 @@ Consider **Jamgaon** (*Mandla District, Madhya Pradesh*):
 <tr>
 <td width="50%" valign="top">
 
-<img src="public/img/gram-sabha.webp" alt="Gram Sabha Meeting artwork" width="100%" />
+<img src="public/img/hero-landscape.webp" alt="Pastoral village landscape artwork" width="100%" />
 
 </td>
 <td width="50%" valign="top">
@@ -427,7 +427,7 @@ VASUDHA-CO2/
 
 <div align="center">
 
-<img src="public/img/Pastoral%20Countryside%20Sketch%20Border.png" alt="Pastoral countryside sketch footer border" width="100%" style="max-height: 120px; object-fit: cover; opacity: 0.8;" />
+<img src="public/img/footer-strip.webp" alt="Pastoral countryside sketch footer border" width="100%" style="max-height: 120px; object-fit: cover; opacity: 0.8;" />
 
 <p><b>VASUDHA CO₂</b> · <i>Democratizing Carbon Market Intelligence for India's Gram Panchayats.</i></p>
 
