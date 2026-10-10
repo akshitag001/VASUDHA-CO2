@@ -7,6 +7,7 @@
 
 **A free, trilingual, 100% browser-based screening tool that empowers Indian Gram Panchayats and rural communities to evaluate Carbon Credit Trading Scheme (CCTS) contracts with ruthless economic realism.**
 
+[![Live Website](https://img.shields.io/badge/Live%20Demo-brave--goodall--orpin.vercel.app-2b6a3d?style=for-the-badge&logo=vercel&logoColor=white)](https://brave-goodall-orpin.vercel.app/)
 [![React 19](https://img.shields.io/badge/React-19.2-1b1a17?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-1b1a17?style=for-the-badge&logo=typescript&logoColor=3178C6)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-8.2-1b1a17?style=for-the-badge&logo=vite&logoColor=646CFF)](https://vitejs.dev/)
@@ -16,11 +17,11 @@
 [![License](https://img.shields.io/badge/Code4Nature-2026%20Challenge-d9a21b?style=for-the-badge)](https://www.fes.org.in/)
 
 <p align="center">
-  <b>Built for the Code4Nature Challenge 2026</b><br/>
-  <i>Theme: Local Governance · Foundation for Ecological Security (FES) India Observatory</i>
+  🚀 <b>Live App:</b> <a href="https://brave-goodall-orpin.vercel.app/"><b>https://brave-goodall-orpin.vercel.app/</b></a><br/>
+  <b>Built for the Code4Nature Challenge 2026</b> · <i>Theme: Local Governance · Foundation for Ecological Security (FES) India Observatory</i>
 </p>
 
-[✨ Live Overview](#-the-problem-in-one-worked-example) •
+[🌐 Visit Website](https://brave-goodall-orpin.vercel.app/) •
 [🔍 Core Capabilities](#-key-features--walkthrough) •
 [🧮 Mathematical Engine](#-how-the-maths-works) •
 [🖼️ Visual Journey](#-interactive-walkthrough--screenshots) •
