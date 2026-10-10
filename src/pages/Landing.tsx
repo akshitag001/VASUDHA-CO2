@@ -8,7 +8,6 @@ import type { DemoId } from '../state/store'
 import { LangSwitch } from '../ui/Layout'
 import { HERO_LQIP } from '../ui/heroLqip'
 import { Ledger } from '../ui/Ledger'
-import { HeroColorizer } from '../ui/HeroColorizer'
 import { Art, Divider, Logo, Preloader, ScrollDoodle, ScrollText, Sketch, SpinBadge, SplitWords, Tilt, artUrl, useMedia, useProgress, useScrolled, type ArtName } from '../ui/motion'
 
 const DEMO_ORDER: DemoId[] = ['small', 'medium', 'pool']
@@ -74,8 +73,19 @@ export default function Landing() {
     e.currentTarget.style.setProperty('--my', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3))
   }
 
-  // Pinned horizontal "how it works": the section is as tall as the track is wide.
-  const pinRef = useProgress<HTMLElement>('pin')
+  // Pinned horizontal "how it works": the section scrolls through all cards,
+  // then holds them in view (dwell) before unpinning to scroll down.
+  const pinRef = useProgress<HTMLElement>('pin', (p, el) => {
+    const dist = parseFloat(el.style.getPropertyValue('--dist') || '0')
+    const dwell = parseFloat(el.style.getPropertyValue('--dwell') || '0')
+    if (dist > 0 && dwell > 0) {
+      const total = dist + dwell
+      const currentScroll = p * total
+      // Cards reach 100% (all cards fully visible) once currentScroll reaches dist
+      const cardP = Math.min(1, Math.max(0, currentScroll / dist))
+      el.style.setProperty('--prog', cardP.toFixed(4))
+    }
+  })
   const trackRef = useRef<HTMLOListElement>(null)
   useEffect(() => {
     const sec = pinRef.current
@@ -85,11 +95,15 @@ export default function Landing() {
       if (!wide) {
         sec.style.height = ''
         sec.style.setProperty('--dist', '0')
+        sec.style.setProperty('--dwell', '0')
         return
       }
       const dist = Math.max(0, track.scrollWidth - window.innerWidth)
+      // Generous dwell so user sees all cards and the final CTA card before scrolling down
+      const dwell = Math.max(500, Math.round(window.innerHeight * 0.65))
       sec.style.setProperty('--dist', String(dist))
-      sec.style.height = `${window.innerHeight + dist}px`
+      sec.style.setProperty('--dwell', String(dwell))
+      sec.style.height = `${window.innerHeight + dist + dwell}px`
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -194,7 +208,6 @@ export default function Landing() {
           <div id="statement" className="relative mt-12 md:-mt-[6vw] scroll-mt-24">
             {/* Inline 2 KB blurred sketch shows instantly; the real drawing fades over it once decoded. */}
             <div className="hero-land pointer-events-none" style={{ '--lqip': `url(${HERO_LQIP})` } as CSSProperties}>
-              <HeroColorizer />
               <img
                 ref={heroImg}
                 onLoad={markHeroLoaded}
@@ -204,7 +217,7 @@ export default function Landing() {
                 width={1600}
                 height={800}
                 alt=""
-                className="hero-art relative z-10"
+                className="hero-art"
                 decoding="async"
                 fetchPriority="high"
               />
@@ -261,47 +274,54 @@ export default function Landing() {
 
         {/* ================================================= SPECIMEN */}
         {specimen && (
-          <section className="relative max-w-6xl mx-auto px-4 sm:px-6 py-24 sm:py-32 grid lg:grid-cols-[1fr_1.15fr] gap-14 items-center">
-            <div data-reveal="left" className="relative">
-              <div className="hidden xl:block absolute -left-20 top-2 opacity-35 pointer-events-none doodle-float-2">
-                <Sketch kind="leaf" className="w-16 h-16" />
-              </div>
-              <p className="kicker mb-4 flex items-center gap-2">
-                <span>01 — {t('landing.specimenTitle')}</span>
-                <Sketch kind="flower" className="w-5 h-5 opacity-40 doodle-pulse inline-block" />
-              </p>
-              <h2 className="display display-lg mb-6">
-                {does3.slice(0, -2).join(' ')} <span className="hl hl-draw">{does3.slice(-2).join(' ')}</span>
-              </h2>
-              <p className="lede mb-6">{t('landing.specimenNote')}</p>
-              <ul className="space-y-3">
-                {(['landing.does1', 'landing.does2', 'landing.does4'] as TKey[]).map((k, i) => (
-                  <li key={k} className="flex gap-3 items-start" data-reveal style={d(120 * i)}>
-                    <span aria-hidden="true" className="mt-0.5 inline-flex shrink-0 w-6 h-6 rounded-full border border-ink bg-mint items-center justify-center text-xs font-bold">
-                      ✓
-                    </span>
-                    <span className="text-ink-2">{t(k)}</span>
-                  </li>
-                ))}
-              </ul>
+          <section className="relative overflow-hidden py-24 sm:py-32">
+            <div className="section-blobs" aria-hidden="true">
+              <div className="blob" style={{ width: 440, height: 440, left: '-6%', top: '10%', background: '#f6d0ff', opacity: 0.45 }} />
+              <div className="blob" style={{ width: 460, height: 460, right: '-5%', top: '25%', background: '#ffe95c', opacity: 0.45 }} />
+              <div className="blob" style={{ width: 340, height: 340, left: '40%', top: '55%', background: '#a8e5e5', opacity: 0.4 }} />
             </div>
-            <div className="relative" data-reveal="scale">
-              <div className="absolute -inset-4 rounded-[22px] bg-teal border border-ink" style={{ transform: 'rotate(2.4deg)' }} aria-hidden="true" />
-              <div className="hidden lg:block absolute -right-10 -top-8 opacity-40 pointer-events-none doodle-float-1">
-                <Sketch kind="sparkle" className="w-12 h-12" />
+            <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-[1fr_1.15fr] gap-14 items-center">
+              <div data-reveal="left" className="relative">
+                <div className="hidden xl:block absolute -left-20 top-2 opacity-35 pointer-events-none doodle-float-2">
+                  <Sketch kind="leaf" className="w-16 h-16" />
+                </div>
+                <p className="kicker mb-4 flex items-center gap-2">
+                  <span>01 — {t('landing.specimenTitle')}</span>
+                  <Sketch kind="flower" className="w-5 h-5 opacity-40 doodle-pulse inline-block" />
+                </p>
+                <h2 className="display display-lg mb-6">
+                  {does3.slice(0, -2).join(' ')} <span className="hl hl-draw">{does3.slice(-2).join(' ')}</span>
+                </h2>
+                <p className="lede mb-6">{t('landing.specimenNote')}</p>
+                <ul className="space-y-3">
+                  {(['landing.does1', 'landing.does2', 'landing.does4'] as TKey[]).map((k, i) => (
+                    <li key={k} className="flex gap-3 items-start" data-reveal style={d(120 * i)}>
+                      <span aria-hidden="true" className="mt-0.5 inline-flex shrink-0 w-6 h-6 rounded-full border border-ink bg-mint items-center justify-center text-xs font-bold">
+                        ✓
+                      </span>
+                      <span className="text-ink-2">{t(k)}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="hidden lg:block absolute -left-10 -bottom-8 opacity-40 pointer-events-none doodle-float-3">
-                <Sketch kind="sprout" className="w-14 h-14" />
+              <div className="relative" data-reveal="scale">
+                <div className="absolute -inset-4 rounded-[22px] bg-teal border border-ink" style={{ transform: 'rotate(2.4deg)' }} aria-hidden="true" />
+                <div className="hidden lg:block absolute -right-10 -top-8 opacity-40 pointer-events-none doodle-float-1">
+                  <Sketch kind="sparkle" className="w-12 h-12" />
+                </div>
+                <div className="hidden lg:block absolute -left-10 -bottom-8 opacity-40 pointer-events-none doodle-float-3">
+                  <Sketch kind="sprout" className="w-14 h-14" />
+                </div>
+                <Tilt max={5}>
+                  <figure className="sheet relative" style={{ borderColor: '#1a3300', boxShadow: '8px 8px 0 #1a3300' }}>
+                    <div className="flex items-center justify-between mb-3">
+                      <figcaption className="kicker">{t('landing.specimenTitle')}</figcaption>
+                      <span className="chip">● live</span>
+                    </div>
+                    <Ledger r={specimen.scenarios.mid} input={specimen.finance} caption="Jamgaon, Mandla" />
+                  </figure>
+                </Tilt>
               </div>
-              <Tilt max={5}>
-                <figure className="sheet relative" style={{ borderColor: '#1a3300', boxShadow: '8px 8px 0 #1a3300' }}>
-                  <div className="flex items-center justify-between mb-3">
-                    <figcaption className="kicker">{t('landing.specimenTitle')}</figcaption>
-                    <span className="chip">● live</span>
-                  </div>
-                  <Ledger r={specimen.scenarios.mid} input={specimen.finance} caption="Jamgaon, Mandla" />
-                </figure>
-              </Tilt>
             </div>
           </section>
         )}
@@ -311,7 +331,12 @@ export default function Landing() {
         {/* ================================================= HOW IT WORKS (pinned, scrolls sideways) */}
         <section id="how" ref={pinRef} className="hscroll">
           <div className="hscroll-sticky">
-            <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 flex flex-wrap items-end justify-between gap-4">
+            <div className="section-blobs" aria-hidden="true">
+              <div className="blob" style={{ width: 500, height: 500, left: '-5%', top: '15%', background: '#ffe95c', opacity: 0.42 }} />
+              <div className="blob" style={{ width: 460, height: 460, right: '-5%', top: '20%', background: '#a8e5e5', opacity: 0.45 }} />
+              <div className="blob" style={{ width: 380, height: 380, left: '42%', top: '48%', background: '#ffdcc2', opacity: 0.4 }} />
+            </div>
+            <div className="relative z-10 max-w-6xl w-full mx-auto px-4 sm:px-6 flex flex-wrap items-end justify-between gap-4">
               <div className="relative">
                 <p className="kicker mb-3">02 — {t('landing.stepsTitle')}</p>
                 <h2 className="display display-lg flex items-center gap-3">
@@ -324,7 +349,7 @@ export default function Landing() {
                 <Sketch kind="wind" className="w-8 h-8 opacity-40 hidden md:block doodle-float-2" />
               </div>
             </div>
-            <ol ref={trackRef} className="hscroll-track">
+            <ol ref={trackRef} className="hscroll-track relative z-10">
               {STEPS.map((s, i) => (
                 <li key={s.k} className={`hscroll-panel ${s.tone}`}>
                   <div className="flex items-start justify-between gap-4">
@@ -351,7 +376,7 @@ export default function Landing() {
                 </Link>
               </li>
             </ol>
-            <div className="max-w-6xl w-full mx-auto px-4 sm:px-6">
+            <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 relative z-10">
               <div className="hscroll-bar">
                 <i />
               </div>
@@ -362,59 +387,73 @@ export default function Landing() {
         <Divider kind="loop" emblem="🌱" tone="#d5f5c2" />
 
         {/* ================================================= DEMOS */}
-        <section id="demos" className="relative max-w-6xl mx-auto px-4 sm:px-6 py-24 scroll-mt-28">
-          <div className="flex flex-wrap items-end justify-between gap-6 mb-12" data-reveal>
-            <div>
-              <p className="kicker mb-4">03 — {t('landing.demosNote')}</p>
-              <h2 className="display display-lg">
-                <span className="hl hl-draw">{t('landing.demosTitle')}</span>
-              </h2>
-            </div>
-            <div className="flex items-center gap-3">
-              <ScrollDoodle preset="swoop-down" className="w-28 sm:w-36 h-14 hidden md:block opacity-50" strokeWidth={1.8} />
-              <Sketch kind="spiral" className="w-10 h-10 hidden md:block opacity-35 doodle-float-1" />
-            </div>
+        <section id="demos" className="relative overflow-hidden py-24 scroll-mt-28">
+          <div className="section-blobs" aria-hidden="true">
+            <div className="blob" style={{ width: 440, height: 440, left: '-4%', top: '20%', background: '#f6d0ff', opacity: 0.48 }} />
+            <div className="blob" style={{ width: 460, height: 460, left: '38%', top: '15%', background: '#ffe95c', opacity: 0.44 }} />
+            <div className="blob" style={{ width: 420, height: 420, right: '-4%', top: '25%', background: '#a8e5e5', opacity: 0.46 }} />
           </div>
-          <ol className="grid md:grid-cols-3 gap-8">
-            {DEMO_ORDER.map((id, i) => (
-              <li key={id} data-reveal style={d(i * 120)}>
-                <Tilt className="h-full">
-                  <div className={`note-card relative ${DEMO_TONE[i]} h-full flex flex-col`} style={{ rotate: DEMO_TILT[i] }}>
-                    <span className="display text-5xl mb-6" style={{ letterSpacing: '0.04em' }}>
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <h3 className="text-2xl mb-2">{t(`landing.demo.${id}.title` as TKey)}</h3>
-                    <p className="text-ink-2 mb-6 flex-1">{t(`landing.demo.${id}.desc` as TKey)}</p>
-                    <button type="button" className="btn self-start" onClick={() => open(id)}>
-                      {t('landing.open')} <span className="arr">→</span>
-                    </button>
-                  </div>
-                </Tilt>
-              </li>
-            ))}
-          </ol>
+          <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="flex flex-wrap items-end justify-between gap-6 mb-12" data-reveal>
+              <div>
+                <p className="kicker mb-4">03 — {t('landing.demosNote')}</p>
+                <h2 className="display display-lg">
+                  <span className="hl hl-draw">{t('landing.demosTitle')}</span>
+                </h2>
+              </div>
+              <div className="flex items-center gap-3">
+                <ScrollDoodle preset="swoop-down" className="w-28 sm:w-36 h-14 hidden md:block opacity-50" strokeWidth={1.8} />
+                <Sketch kind="spiral" className="w-10 h-10 hidden md:block opacity-35 doodle-float-1" />
+              </div>
+            </div>
+            <ol className="grid md:grid-cols-3 gap-8">
+              {DEMO_ORDER.map((id, i) => (
+                <li key={id} data-reveal style={d(i * 120)}>
+                  <Tilt className="h-full">
+                    <div className={`note-card relative ${DEMO_TONE[i]} h-full flex flex-col`} style={{ rotate: DEMO_TILT[i] }}>
+                      <span className="display text-5xl mb-6" style={{ letterSpacing: '0.04em' }}>
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <h3 className="text-2xl mb-2">{t(`landing.demo.${id}.title` as TKey)}</h3>
+                      <p className="text-ink-2 mb-6 flex-1">{t(`landing.demo.${id}.desc` as TKey)}</p>
+                      <button type="button" className="btn self-start" onClick={() => open(id)}>
+                        {t('landing.open')} <span className="arr">→</span>
+                      </button>
+                    </div>
+                  </Tilt>
+                </li>
+              ))}
+            </ol>
+          </div>
         </section>
 
         {/* ================================================= POOLING */}
-        <section className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24 grid md:grid-cols-[1.2fr_1fr] gap-10 md:gap-14 items-center">
-          <div data-reveal="left" className="order-2 md:order-1 relative">
-            <div className="absolute -top-8 -right-4 sm:-right-8 doodle-float-2 opacity-45 pointer-events-none" aria-hidden="true">
-              <Sketch kind="butterfly" className="w-16 h-16" />
-            </div>
-            <Art name="pooling" className="w-full" />
+        <section className="relative overflow-hidden py-16 sm:py-24">
+          <div className="section-blobs" aria-hidden="true">
+            <div className="blob" style={{ width: 460, height: 460, left: '-6%', top: '12%', background: '#ffdcc2', opacity: 0.48 }} />
+            <div className="blob" style={{ width: 440, height: 440, right: '-4%', top: '20%', background: '#f6d0ff', opacity: 0.45 }} />
+            <div className="blob" style={{ width: 360, height: 360, left: '35%', top: '55%', background: '#ffe95c', opacity: 0.38 }} />
           </div>
-          <div data-reveal className="order-1 md:order-2 relative">
-            <div className="hidden lg:block absolute -left-14 -top-6 opacity-35 pointer-events-none">
-              <ScrollDoodle preset="vine" className="w-10 h-36" strokeWidth={1.5} />
+          <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-[1.2fr_1fr] gap-10 md:gap-14 items-center">
+            <div data-reveal="left" className="order-2 md:order-1 relative">
+              <div className="absolute -top-8 -right-4 sm:-right-8 doodle-float-2 opacity-45 pointer-events-none" aria-hidden="true">
+                <Sketch kind="butterfly" className="w-16 h-16" />
+              </div>
+              <Art name="pooling" className="w-full" />
             </div>
-            <p className="kicker mb-4">04 — {t('nav.pooling')}</p>
-            <h2 className="display display-md mb-5">
-              <span className="hl hl-blush">{t('landing.demo.pool.title')}</span>
-            </h2>
-            <p className="lede mb-8">{t('landing.demo.pool.desc')}</p>
-            <button type="button" data-magnetic className="btn btn-lg" onClick={() => open('pool')}>
-              <span className="arr">→</span> {t('landing.open')}
-            </button>
+            <div data-reveal className="order-1 md:order-2 relative">
+              <div className="hidden lg:block absolute -left-14 -top-6 opacity-35 pointer-events-none">
+                <ScrollDoodle preset="vine" className="w-10 h-36" strokeWidth={1.5} />
+              </div>
+              <p className="kicker mb-4">04 — {t('nav.pooling')}</p>
+              <h2 className="display display-md mb-5">
+                <span className="hl hl-blush">{t('landing.demo.pool.title')}</span>
+              </h2>
+              <p className="lede mb-8">{t('landing.demo.pool.desc')}</p>
+              <button type="button" data-magnetic className="btn btn-lg" onClick={() => open('pool')}>
+                <span className="arr">→</span> {t('landing.open')}
+              </button>
+            </div>
           </div>
         </section>
 
@@ -422,10 +461,15 @@ export default function Landing() {
 
         {/* ================================================= DOES / DOES NOT */}
         <section className="relative py-24 overflow-hidden">
+          <div className="section-blobs" aria-hidden="true">
+            <div className="blob" style={{ width: 480, height: 480, left: '0%', top: '15%', background: '#d5f5c2', opacity: 0.45 }} />
+            <div className="blob" style={{ width: 480, height: 480, right: '0%', top: '15%', background: '#ffd6e3', opacity: 0.45 }} />
+            <div className="blob" style={{ width: 340, height: 340, left: '45%', top: '45%', background: '#ffe95c', opacity: 0.35 }} />
+          </div>
           <div className="hidden lg:block absolute right-12 top-10 opacity-30 pointer-events-none doodle-float-1">
             <Sketch kind="cloud" className="w-24 h-24" />
           </div>
-          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-8">
+          <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-8">
             <div className="sheet relative" data-reveal style={{ borderColor: '#1a3300' }}>
               <div className="absolute -top-4 -right-4 opacity-40 pointer-events-none doodle-pulse">
                 <Sketch kind="sparkle" className="w-10 h-10" />

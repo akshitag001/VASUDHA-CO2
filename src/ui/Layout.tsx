@@ -233,13 +233,13 @@ export default function Layout() {
           </div>
         </aside>
         <div className="min-w-0">
-          <main id="main" ref={mainRef} tabIndex={-1} className="print-root px-2 sm:px-6 lg:px-10 py-10 max-w-[64rem] outline-none">
+          <main id="main" ref={mainRef} tabIndex={-1} className="print-root px-2 sm:px-6 lg:px-8 xl:px-10 py-10 w-full outline-none">
             <div key={loc.pathname} className="page-enter">
               <Outlet />
             </div>
           </main>
-          <Art name="footer-strip" className="mx-2 sm:mx-6 lg:mx-10 mt-10 -mb-1 max-w-[62rem] w-[calc(100%-1rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-5rem)]" />
-          <footer className="no-print mx-2 sm:mx-6 lg:mx-10 mb-6 p-6 rounded-[18px] bg-ink max-w-[62rem] small" style={{ color: '#cfd8c4' }}>
+          <Art name="footer-strip" className="mx-2 sm:mx-6 lg:mx-8 xl:mx-10 mt-10 -mb-1 w-[calc(100%-1rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] xl:w-[calc(100%-5rem)]" />
+          <footer className="no-print mx-2 sm:mx-6 lg:mx-8 xl:mx-10 mb-6 p-6 rounded-[18px] bg-ink w-[calc(100%-1rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] xl:w-[calc(100%-5rem)] small" style={{ color: '#cfd8c4' }}>
             <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
               <span className="display text-2xl" style={{ color: '#fcfaf5' }}>
                 VASUDHA <span style={{ color: '#ffe95c' }}>CO₂</span>

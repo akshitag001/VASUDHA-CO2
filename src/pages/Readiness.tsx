@@ -71,7 +71,7 @@ export default function Readiness() {
 
       <section className="section">
         <h2 className="section-title mb-4">{t('ready.manualTitle')}</h2>
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
           {GROUPS.map(([g, ids]) => (
             <fieldset key={g}>
               <legend className="font-semibold serif text-lg mb-2">{t(g)}</legend>

@@ -82,11 +82,11 @@ export default function Brief() {
       </div>
 
       {/* The brief itself. Plain hex colours only, no letter-spacing — see lib/exportPdf.ts. */}
-      <div className="overflow-x-auto mt-4">
+      <div className="overflow-x-auto mt-4 flex justify-center py-6 px-4 bg-paper-2 rounded-[18px] border border-rule">
         <div
           ref={ref}
           lang={lang}
-          className="brief"
+          className="brief shadow-sm"
           style={{ width: '794px', maxWidth: 'none', background: '#ffffff', color: '#1a3300', padding: '34px 38px', border: '1px solid #e2dccb', fontSize: '15px', lineHeight: 1.5 }}
         >
           <header style={{ borderBottom: '3px solid #1a3300', paddingBottom: 10, marginBottom: 14 }}>

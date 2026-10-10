@@ -93,7 +93,7 @@ export default function Money() {
             <span className="hint">{t('money.priceHint')}</span>
           </fieldset>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
             <SliderField
               label={t('money.fraction')}
               tag={<AsmTag id="creditableFraction" changed={ch.creditableFraction} />}

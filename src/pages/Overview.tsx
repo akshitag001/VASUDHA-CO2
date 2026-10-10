@@ -42,7 +42,7 @@ export default function Overview() {
         </p>
       </VerdictStamp>
 
-      <section className="grid sm:grid-cols-2 gap-4 mt-6" aria-label={t('money.headline')}>
+      <section className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-6" aria-label={t('money.headline')}>
         <Stat label={`${t('overview.incomeHH')} · ${t('app.perYear')}`} value={inrRange(perHH, lang)} tone={perHH.mid < 0 ? 'neg' : undefined}>
           <RangeStrip range={perHH} domain={domain(perHH)} label={t('overview.incomeHH')} format={fmt} />
           <p className="small muted">

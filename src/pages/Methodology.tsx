@@ -68,7 +68,7 @@ function Group({ title, lede, items, empty }: { title: string; lede?: string; it
         {title} <span className="figure muted">({items.length})</span>
       </h2>
       {lede && <p className="muted mb-3">{lede}</p>}
-      {items.length ? <ul className="grid gap-4 mt-3">{items.map((m) => <Card key={m.entry.id} m={m} />)}</ul> : <p className="muted">{empty}</p>}
+      {items.length ? <ul className="grid gap-4 mt-3 xl:grid-cols-2">{items.map((m) => <Card key={m.entry.id} m={m} />)}</ul> : <p className="muted">{empty}</p>}
     </section>
   )
 }
