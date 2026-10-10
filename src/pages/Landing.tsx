@@ -6,6 +6,7 @@ import { resolveVillage } from '../model/village'
 import { useApp } from '../state/AppState'
 import type { DemoId } from '../state/store'
 import { LangSwitch } from '../ui/Layout'
+import { HERO_LQIP } from '../ui/heroLqip'
 import { Ledger } from '../ui/Ledger'
 import { Art, Divider, Logo, Preloader, ScrollText, Sketch, SpinBadge, SplitWords, Tilt, artUrl, useMedia, useProgress, useScrolled, type ArtName } from '../ui/motion'
 
@@ -45,6 +46,13 @@ export default function Landing() {
   const navigate = useNavigate()
   const scrolled = useScrolled(40)
   const wide = useMedia('(min-width: 768px)')
+  // Flip the hero's loaded class straight on the DOM node: no React re-render of the whole page.
+  const heroImg = useRef<HTMLImageElement>(null)
+  const markHeroLoaded = () => heroImg.current?.parentElement?.classList.add('is-loaded')
+  // A cached image can finish before React attaches onLoad.
+  useEffect(() => {
+    if (heroImg.current?.complete && heroImg.current.naturalWidth) markHeroLoaded()
+  }, [])
 
   // Computed live, by the same engine, so the numbers always match the tool.
   const specimen = useMemo(() => {
@@ -174,8 +182,11 @@ export default function Landing() {
           </div>
 
           <div className="relative mt-6 md:-mt-[6vw] pointer-events-none">
-            <div className="hero-land">
+            {/* Inline 2 KB blurred sketch shows instantly; the real drawing fades over it once decoded. */}
+            <div className="hero-land" style={{ '--lqip': `url(${HERO_LQIP})` } as CSSProperties}>
               <img
+                ref={heroImg}
+                onLoad={markHeroLoaded}
                 src={artUrl('hero-landscape')}
                 srcSet={`${import.meta.env.BASE_URL}img/hero-landscape-sm.webp 800w, ${artUrl('hero-landscape')} 1600w`}
                 sizes="100vw"

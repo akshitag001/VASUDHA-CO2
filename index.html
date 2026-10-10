@@ -12,12 +12,24 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preload" as="image" href="/img/hero-landscape.webp" type="image/webp" />
+    <script>
+      // Landing page only: start the hero illustration with the HTML, choosing the same file the
+      // <img srcset> will pick, so phones don't download the desktop size as well.
+      if (location.pathname === '%BASE_URL%') {
+        var l = document.createElement('link')
+        l.rel = 'preload'
+        l.as = 'image'
+        l.fetchPriority = 'high'
+        l.setAttribute('imagesrcset', '%BASE_URL%img/hero-landscape-sm.webp 800w, %BASE_URL%img/hero-landscape.webp 1600w')
+        l.setAttribute('imagesizes', '100vw')
+        document.head.appendChild(l)
+      }
+    </script>
     <title>VASUDHA CO2 — check the numbers before you sign</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gujarati:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&family=IBM+Plex+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gujarati:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
   </head>

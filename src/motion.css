@@ -16,7 +16,8 @@
   mix-blend-mode: multiply;
   -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent);
   mask-image: linear-gradient(to bottom, #000 78%, transparent);
-  transition: opacity 1.2s var(--ease-out) 0.2s, transform 1.6s var(--ease-out) 0.2s;
+  /* quick fade, long glide: the drawing is on screen as soon as it is decoded */
+  transition: opacity 0.35s ease-out, transform 1.4s var(--ease-out);
 }
 /* copy drifts up and fades as you scroll away */
 .hero-copy {
@@ -29,6 +30,16 @@
   transform: translate3d(calc(var(--mx, 0) * -46px), calc(var(--my, 0) * -36px + var(--sy) * -0.22px), 0);
   transition: transform 0.9s var(--ease-out);
 }
+.hero-land { position: relative; }
+.hero-land::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: var(--lqip) center bottom / 100% auto no-repeat; filter: blur(5px); opacity: 0.65;
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent);
+  transition: opacity 0.6s ease-out;
+}
+.hero-land.is-loaded::before { opacity: 0; }
+.hero-land:not(.is-loaded) .hero-art { opacity: 0; }
 .hero-land {
   transform: translate3d(calc(var(--mx, 0) * 14px), calc(var(--sy) * 0.14px), 0) scale(calc(1 + var(--sy) * 0.00018));
   transform-origin: 50% 100%;
@@ -41,12 +52,12 @@
 .art { display: block; height: auto; mix-blend-mode: multiply; user-select: none; pointer-events: none; }
 /* A transformed wrapper isolates blending, so the wrapper itself must multiply too (otherwise the paper shows as a pale box). */
 .hero-land, .parallax:has(.art), [data-reveal]:has(> .art) { mix-blend-mode: multiply; }
-@keyframes art-pop { from { opacity: 0; transform: translateY(16px) rotate(-1.5deg); } to { opacity: 1; transform: none; } }
-.art-pop { animation: art-pop 0.8s var(--ease-out) both; }
+@keyframes art-pop { from { opacity: 0.2; transform: translateY(12px) rotate(-1deg); } to { opacity: 1; transform: none; } }
+.art-pop { animation: art-pop 0.5s var(--ease-out) both; }
 
 /* ------------------------------------------------------- scroll text */
 .scroll-text span {
-  opacity: clamp(0.13, calc((var(--prog, 0) * 2.3 - 0.35) * var(--n) - var(--i)), 1);
+  opacity: clamp(0.28, calc((var(--prog, 0) * 2.2 - 0.25) * var(--n) - var(--i)), 1);
   transition: opacity 0.15s linear;
 }
 

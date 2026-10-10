@@ -50,7 +50,7 @@
   --font-display: "Bricolage Grotesque", "IBM Plex Sans Devanagari", "Noto Sans Gujarati", "Archivo Black", system-ui, sans-serif;
   --font-sans: "Inter", "IBM Plex Sans Devanagari", "Noto Sans Gujarati", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-serif: var(--font-display);
-  --font-mono: "Roboto Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --font-mono: "Roboto Mono", ui-monospace, monospace;
 }
 
 :root {
@@ -400,17 +400,22 @@ code, .code { font-family: var(--font-mono); font-size: 0.85em; background: var(
 /* ------------------------------------------------------------- motion */
 [data-reveal] {
   opacity: 0; transform: translateY(28px);
-  transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
   transition-delay: var(--d, 0ms);
 }
-[data-reveal].is-in { opacity: 1; transform: none; }
+[data-reveal].is-in,
+[data-reveal="left"].is-in,
+[data-reveal="scale"].is-in {
+  opacity: 1;
+  transform: none;
+}
 [data-reveal="left"] { transform: translateX(-36px); }
 [data-reveal="scale"] { transform: scale(0.94); }
 
 /* word-by-word headline reveal */
 .split-word { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.06em; }
-.split-word > span { display: inline-block; transform: translateY(105%); transition: transform 1s var(--ease-out); transition-delay: var(--d, 0ms); }
-.is-in .split-word > span { transform: none; }
+.split-word > span { display: inline-block; transform: translateY(105%); transition: transform 0.8s var(--ease-out); transition-delay: var(--d, 0ms); }
+.is-in .split-word > span, .split-word.is-in > span { transform: none; }
 
 .parallax { will-change: transform; }
 

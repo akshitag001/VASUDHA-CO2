@@ -21,34 +21,55 @@ const ART_SIZES = {
 export type ArtName = keyof typeof ART_SIZES
 export const artUrl = (name: ArtName) => `${import.meta.env.BASE_URL}img/${name}.webp`
 
-let preloadPromise: Promise<void> | null = null
-/** Fetches + decodes every illustration once, so pages never wait on them. */
-export function preloadArt(onProgress?: (frac: number) => void) {
-  const names = Object.keys(ART_SIZES) as ArtName[]
-  if (preloadPromise && !onProgress) return preloadPromise
-  let done = 0
-  const p = Promise.all(
-    names.map(
-      (n) =>
-        new Promise<void>((res) => {
-          const img = new Image()
-          img.decoding = 'async'
-          const fin = () => {
-            done++
-            onProgress?.(done / names.length)
-            res()
-          }
-          img.onload = () => (img.decode ? img.decode().catch(() => undefined).then(fin) : fin())
-          img.onerror = fin
-          img.src = artUrl(n)
-        }),
-    ),
-  ).then(() => undefined)
-  preloadPromise = p
-  return p
+/** Resolves once the image is downloaded AND decoded (so painting it never stalls), or failed. */
+const decoded = (img: HTMLImageElement) =>
+  new Promise<void>((res) => {
+    const done = () => (img.decode ? img.decode().catch(() => undefined).then(() => res()) : res())
+    if (img.complete) return img.naturalWidth ? done() : res()
+    img.addEventListener('load', done, { once: true })
+    img.addEventListener('error', () => res(), { once: true })
+  })
+
+const fetchArt = (src: string) => {
+  const img = new Image()
+  img.decoding = 'async'
+  img.fetchPriority = 'low'
+  img.src = src
+  return decoded(img)
 }
 
-export function Art({ name, className = '', style, eager = true }: { name: ArtName; className?: string; style?: CSSProperties; eager?: boolean }) {
+let warmPromise: Promise<void> | null = null
+/**
+ * Warms the cache with every off-screen illustration so later sections and pages show them instantly.
+ * Waits for the window `load` event, then fetches at low priority, two at a time — it must never
+ * compete with what is on screen. The hero is excluded: its <img srcset> + <link rel=preload> own it.
+ */
+export function preloadArt() {
+  if (warmPromise) return warmPromise
+  warmPromise = new Promise<void>((res) => {
+    const start = () => {
+      const queue = (Object.keys(ART_SIZES) as ArtName[]).filter((n) => n !== 'hero-landscape').map(artUrl)
+      let active = 0
+      const pump = () => {
+        if (!queue.length && !active) return res()
+        while (active < 2 && queue.length) {
+          active++
+          void fetchArt(queue.shift()!).then(() => {
+            active--
+            pump()
+          })
+        }
+      }
+      pump()
+    }
+    if (document.readyState === 'complete') start()
+    else window.addEventListener('load', start, { once: true })
+  })
+  return warmPromise
+}
+
+/** Line-art image. Lazy by default (the cache is warmed by preloadArt); pass `eager` for above-the-fold art. */
+export function Art({ name, className = '', style, eager = false }: { name: ArtName; className?: string; style?: CSSProperties; eager?: boolean }) {
   const [w, h] = ART_SIZES[name]
   return (
     <img
@@ -96,42 +117,94 @@ export function useScrollVar() {
 
 /**
  * Adds `.is-in` to every [data-reveal] element as it scrolls into view.
- * A MutationObserver picks up elements from lazily-loaded pages, so nothing is ever left invisible.
+ * Uses IntersectionObserver with positive root margin, immediate in-viewport checks,
+ * and a MutationObserver so nothing is ever left invisible.
  */
 export function useReveal() {
   useEffect(() => {
-    const mark = (el: Element) => el.classList.add('is-in')
+    const mark = (el: Element) => {
+      el.classList.add('is-in')
+      el.removeAttribute('data-watched')
+    }
+
+    const checkVisible = () => {
+      const vh = window.innerHeight + 80
+      document.querySelectorAll('[data-reveal]:not(.is-in)').forEach((el) => {
+        const r = el.getBoundingClientRect()
+        if (r.top < vh && r.bottom > -80) {
+          mark(el)
+          io?.unobserve(el)
+        }
+      })
+    }
+
     const io =
       reduced() || !('IntersectionObserver' in window)
         ? null
         : new IntersectionObserver(
-            (entries) =>
+            (entries) => {
               entries.forEach((e) => {
                 if (e.isIntersecting) {
                   mark(e.target)
                   io?.unobserve(e.target)
                 }
-              }),
-            { rootMargin: '0px 0px -6% 0px', threshold: 0.08 },
+              })
+            },
+            { rootMargin: '0px 0px 60px 0px', threshold: 0.01 },
           )
+
     let raf = 0
     const scan = () => {
       raf = 0
-      document.querySelectorAll('[data-reveal]:not(.is-in):not([data-watched])').forEach((el) => {
-        el.setAttribute('data-watched', '')
-        if (io) io.observe(el)
-        else mark(el)
+      const vh = window.innerHeight + 80
+      document.querySelectorAll('[data-reveal]:not(.is-in)').forEach((el) => {
+        const r = el.getBoundingClientRect()
+        if (reduced() || !io || (r.top < vh && r.bottom > -80)) {
+          mark(el)
+        } else if (!el.hasAttribute('data-watched')) {
+          el.setAttribute('data-watched', '')
+          io.observe(el)
+        }
       })
     }
+
     scan()
+
     const mo = new MutationObserver(() => {
       if (!raf) raf = requestAnimationFrame(scan)
     })
     mo.observe(document.body, { childList: true, subtree: true })
+
+    const onScrollOrResize = () => {
+      if (!raf) {
+        raf = requestAnimationFrame(() => {
+          raf = 0
+          checkVisible()
+        })
+      }
+    }
+
+    window.addEventListener('scroll', onScrollOrResize, { passive: true })
+    window.addEventListener('resize', onScrollOrResize, { passive: true })
+    window.addEventListener('vasudha:preloader-done', checkVisible)
+
+    // Safety checks guarantee no section stays empty if initial layout shifted or preloader cleared
+    const t1 = window.setTimeout(checkVisible, 250)
+    const t2 = window.setTimeout(checkVisible, 750)
+    const t3 = window.setTimeout(checkVisible, 1500)
+    const t4 = window.setTimeout(checkVisible, 3000)
+
     return () => {
       mo.disconnect()
       io?.disconnect()
-      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScrollOrResize)
+      window.removeEventListener('resize', onScrollOrResize)
+      window.removeEventListener('vasudha:preloader-done', checkVisible)
+      window.clearTimeout(t1)
+      window.clearTimeout(t2)
+      window.clearTimeout(t3)
+      window.clearTimeout(t4)
+      if (raf) cancelAnimationFrame(raf)
     }
   }, [])
 }
@@ -356,7 +429,7 @@ export function Cursor() {
 
 /* ------------------------------------------------------------ preloader */
 
-/** Full-screen yellow counter tied to real image loading. Shown once per browser session. */
+/** Full-screen yellow counter that lifts as soon as the hero image is ready. Shown once per browser session. */
 export function Preloader() {
   const [n, setN] = useState(0)
   const [done, setDone] = useState(false)
@@ -369,58 +442,59 @@ export function Preloader() {
   })
 
   useEffect(() => {
-    if (gone) {
-      preloadArt()
-      return
-    }
-    // Hero animations wait for the curtain (see .preloading in index.css).
+    if (gone) return
+    // While this class is on <html>, the hero holds its start pose (see motion.css).
     const root = document.documentElement
     root.classList.add('preloading')
     document.body.style.overflow = 'hidden'
-    let loaded = 0
-    preloadArt((f) => {
-      loaded = f
-    })
+
+    // The curtain waits for the one image the visitor sees first — the hero — and nothing else.
+    let heroReady = false
+    const hero = document.querySelector<HTMLImageElement>('.hero-art')
+    if (hero) void decoded(hero).then(() => (heroReady = true))
+    else heroReady = true
+
     const start = performance.now()
     let shown = 0
     let raf = 0
-    let t1 = 0
-    let t2 = 0
+    let lift = 0
     let finished = false
+    const finish = () => {
+      if (finished) return
+      finished = true
+      setN(100)
+      setDone(true)
+      document.body.style.overflow = ''
+      // Release the hero NOW so it animates in while the curtain slides away.
+      root.classList.remove('preloading')
+      try {
+        sessionStorage.setItem('vasudha.loaded', '1')
+      } catch {
+        /* private mode — fine */
+      }
+      window.dispatchEvent(new CustomEvent('vasudha:preloader-done'))
+      window.dispatchEvent(new Event('scroll'))
+      lift = window.setTimeout(() => setGone(true), 1000)
+    }
     const step = (now: number) => {
       if (finished) return
       const el = now - start
-      // Never faster than 0.9s, never slower than 3s; otherwise follows the real image progress.
-      const target = el > 3000 ? 1 : Math.min(Math.min(1, el / 900), loaded)
-      shown += (target - shown) * 0.12
-      if (target === 1 && shown > 0.99) shown = 1
+      // Counts up over at least 0.6s, holds at 90 until the hero is decoded, stops waiting at 2.5s.
+      const target = Math.min(el / 600, heroReady || el > 2500 ? 1 : 0.9)
+      shown += (target - shown) * 0.18
+      if (target >= 1 && shown > 0.985) return finish()
       setN(Math.round(shown * 100))
-      if (shown < 1) raf = requestAnimationFrame(step)
-      else {
-        finished = true
-        setDone(true)
-        document.body.style.overflow = ''
-        try {
-          sessionStorage.setItem('vasudha.loaded', '1')
-        } catch {
-          /* private mode — fine */
-        }
-        t1 = window.setTimeout(() => root.classList.remove('preloading'), 1600)
-        t2 = window.setTimeout(() => setGone(true), 1000)
-      }
+      raf = requestAnimationFrame(step)
     }
     raf = requestAnimationFrame(step)
     // rAF can be throttled (background tab, low-power mode): never let the curtain hang.
-    const bail = window.setTimeout(() => {
-      shown = 1
-      step(performance.now())
-    }, 3500)
+    const bail = window.setTimeout(finish, 3000)
     return () => {
       cancelAnimationFrame(raf)
       window.clearTimeout(bail)
-      window.clearTimeout(t1)
-      window.clearTimeout(t2)
+      window.clearTimeout(lift)
       document.body.style.overflow = ''
+      root.classList.remove('preloading')
     }
   }, [gone])
 
