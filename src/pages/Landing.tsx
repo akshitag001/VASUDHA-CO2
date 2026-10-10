@@ -8,7 +8,7 @@ import type { DemoId } from '../state/store'
 import { LangSwitch } from '../ui/Layout'
 import { HERO_LQIP } from '../ui/heroLqip'
 import { Ledger } from '../ui/Ledger'
-import { Art, Divider, Logo, Preloader, ScrollText, Sketch, SpinBadge, SplitWords, Tilt, artUrl, useMedia, useProgress, useScrolled, type ArtName } from '../ui/motion'
+import { Art, Divider, Logo, Preloader, ScrollDoodle, ScrollText, Sketch, SpinBadge, SplitWords, Tilt, artUrl, useMedia, useProgress, useScrolled, type ArtName } from '../ui/motion'
 
 const DEMO_ORDER: DemoId[] = ['small', 'medium', 'pool']
 const DEMO_TONE = ['bg-pink', 'bg-yellow', 'bg-mint']
@@ -154,9 +154,18 @@ export default function Landing() {
           </div>
 
           <div className="hero-copy relative max-w-6xl mx-auto px-4 sm:px-6 pt-36 sm:pt-44 text-center">
+            {/* Margin atmospheric sketchbook doodles */}
+            <div className="hidden xl:block absolute left-4 2xl:left-8 top-52 opacity-30 doodle-float-1 pointer-events-none" aria-hidden="true">
+              <Sketch kind="sprout" className="w-16 h-16" />
+            </div>
+            <div className="hidden xl:block absolute right-4 2xl:right-8 top-56 opacity-30 doodle-float-2 pointer-events-none" aria-hidden="true">
+              <Sketch kind="loop" className="w-20 h-20" />
+            </div>
+
             <div data-reveal>
-              <span className="badge mb-8">
+              <span className="badge mb-8 inline-flex items-center gap-1.5">
                 <span aria-hidden="true">✦</span> {t('landing.kicker')}
+                <Sketch kind="sparkle" className="w-4 h-4 ml-1 opacity-50 doodle-pulse inline-block" />
               </span>
             </div>
             <h1 className="display display-xl mx-auto max-w-5xl mb-8" data-reveal style={{ transform: 'none' }}>
@@ -201,13 +210,30 @@ export default function Landing() {
 
             {/* Text centered inside the box area of the landscape illustration */}
             <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8 md:p-10 pointer-events-auto">
-              <div className="max-w-2xl lg:max-w-3xl mx-auto px-4 text-center -translate-y-3 sm:-translate-y-6 md:-translate-y-10" data-reveal>
+              <div className="max-w-2xl lg:max-w-3xl mx-auto px-4 text-center -translate-y-3 sm:-translate-y-6 md:-translate-y-10 relative" data-reveal>
+                {/* Whimsical doodles floating organically in the open sky of the countryside sketch */}
+                <div className="hidden sm:block absolute -left-16 sm:-left-24 -top-6 sm:-top-8 doodle-float-1 opacity-45 pointer-events-none" aria-hidden="true">
+                  <Sketch kind="wind" className="w-16 h-16 sm:w-20 sm:h-20" />
+                </div>
+                <div className="hidden sm:block absolute -right-14 sm:-right-24 -top-8 sm:-top-10 doodle-float-2 opacity-50 pointer-events-none" aria-hidden="true">
+                  <Sketch kind="butterfly" className="w-14 h-14 sm:w-16 sm:h-16" />
+                </div>
+                <div className="hidden md:block absolute -left-14 -bottom-6 doodle-float-3 opacity-40 pointer-events-none" aria-hidden="true">
+                  <Sketch kind="sprout" className="w-14 h-14" />
+                </div>
+                <div className="hidden md:block absolute -right-14 -bottom-4 doodle-pulse opacity-45 pointer-events-none" aria-hidden="true">
+                  <Sketch kind="sparkle" className="w-12 h-12" />
+                </div>
+
                 <ScrollText
                   text={t('landing.lede')}
                   className="font-semibold text-ink text-center mx-auto text-[clamp(1rem,2.1vw,2.05rem)] leading-[1.35] tracking-[-0.015em]"
                 />
-                <div className="flex justify-center mt-3 sm:mt-6">
-                  <Sketch kind="arrow" className="w-14 sm:w-20 hidden md:block" style={{ opacity: 0.35 }} />
+
+                {/* Hand-drawn scroll-progressive connecting doodle line and arrow */}
+                <div className="flex flex-col items-center justify-center mt-2 sm:mt-4 pointer-events-none">
+                  <ScrollDoodle preset="swoop-down" className="w-36 sm:w-48 h-12 sm:h-16 opacity-50 -my-1" strokeWidth={1.8} />
+                  <Sketch kind="arrow" className="w-12 sm:w-16 hidden md:block doodle-float-1" style={{ opacity: 0.45 }} />
                 </div>
               </div>
             </div>
@@ -226,11 +252,22 @@ export default function Landing() {
           </div>
         </div>
 
+        {/* Hand-drawn scroll line leading into Section 01 */}
+        <div className="max-w-4xl mx-auto flex justify-center -my-6 sm:-my-10 relative z-10 pointer-events-none">
+          <ScrollDoodle preset="connector-s" className="w-12 h-24 sm:h-32 opacity-40" strokeWidth={1.8} />
+        </div>
+
         {/* ================================================= SPECIMEN */}
         {specimen && (
           <section className="relative max-w-6xl mx-auto px-4 sm:px-6 py-24 sm:py-32 grid lg:grid-cols-[1fr_1.15fr] gap-14 items-center">
-            <div data-reveal="left">
-              <p className="kicker mb-4">01 — {t('landing.specimenTitle')}</p>
+            <div data-reveal="left" className="relative">
+              <div className="hidden xl:block absolute -left-20 top-2 opacity-35 pointer-events-none doodle-float-2">
+                <Sketch kind="leaf" className="w-16 h-16" />
+              </div>
+              <p className="kicker mb-4 flex items-center gap-2">
+                <span>01 — {t('landing.specimenTitle')}</span>
+                <Sketch kind="flower" className="w-5 h-5 opacity-40 doodle-pulse inline-block" />
+              </p>
               <h2 className="display display-lg mb-6">
                 {does3.slice(0, -2).join(' ')} <span className="hl hl-draw">{does3.slice(-2).join(' ')}</span>
               </h2>
@@ -248,6 +285,12 @@ export default function Landing() {
             </div>
             <div className="relative" data-reveal="scale">
               <div className="absolute -inset-4 rounded-[22px] bg-teal border border-ink" style={{ transform: 'rotate(2.4deg)' }} aria-hidden="true" />
+              <div className="hidden lg:block absolute -right-10 -top-8 opacity-40 pointer-events-none doodle-float-1">
+                <Sketch kind="sparkle" className="w-12 h-12" />
+              </div>
+              <div className="hidden lg:block absolute -left-10 -bottom-8 opacity-40 pointer-events-none doodle-float-3">
+                <Sketch kind="sprout" className="w-14 h-14" />
+              </div>
               <Tilt max={5}>
                 <figure className="sheet relative" style={{ borderColor: '#1a3300', boxShadow: '8px 8px 0 #1a3300' }}>
                   <div className="flex items-center justify-between mb-3">
@@ -267,13 +310,17 @@ export default function Landing() {
         <section id="how" ref={pinRef} className="hscroll">
           <div className="hscroll-sticky">
             <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 flex flex-wrap items-end justify-between gap-4">
-              <div>
+              <div className="relative">
                 <p className="kicker mb-3">02 — {t('landing.stepsTitle')}</p>
-                <h2 className="display display-lg">
+                <h2 className="display display-lg flex items-center gap-3">
                   <span className="hl hl-mint">{t('landing.stepsTitle')}</span>
+                  <ScrollDoodle preset="loop-line" className="w-28 sm:w-36 h-8 hidden sm:block opacity-45" strokeWidth={1.8} />
                 </h2>
               </div>
-              <p className="kicker hidden md:block">← scroll →</p>
+              <div className="flex items-center gap-2">
+                <p className="kicker hidden md:block">← scroll →</p>
+                <Sketch kind="wind" className="w-8 h-8 opacity-40 hidden md:block doodle-float-2" />
+              </div>
             </div>
             <ol ref={trackRef} className="hscroll-track">
               {STEPS.map((s, i) => (
@@ -321,7 +368,10 @@ export default function Landing() {
                 <span className="hl hl-draw">{t('landing.demosTitle')}</span>
               </h2>
             </div>
-            <Sketch kind="arrow" className="w-24 hidden md:block" style={{ opacity: 0.35 }} />
+            <div className="flex items-center gap-3">
+              <ScrollDoodle preset="swoop-down" className="w-28 sm:w-36 h-14 hidden md:block opacity-50" strokeWidth={1.8} />
+              <Sketch kind="spiral" className="w-10 h-10 hidden md:block opacity-35 doodle-float-1" />
+            </div>
           </div>
           <ol className="grid md:grid-cols-3 gap-8">
             {DEMO_ORDER.map((id, i) => (
@@ -345,10 +395,16 @@ export default function Landing() {
 
         {/* ================================================= POOLING */}
         <section className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24 grid md:grid-cols-[1.2fr_1fr] gap-10 md:gap-14 items-center">
-          <div data-reveal="left" className="order-2 md:order-1">
+          <div data-reveal="left" className="order-2 md:order-1 relative">
+            <div className="absolute -top-8 -right-4 sm:-right-8 doodle-float-2 opacity-45 pointer-events-none" aria-hidden="true">
+              <Sketch kind="butterfly" className="w-16 h-16" />
+            </div>
             <Art name="pooling" className="w-full" />
           </div>
-          <div data-reveal className="order-1 md:order-2">
+          <div data-reveal className="order-1 md:order-2 relative">
+            <div className="hidden lg:block absolute -left-14 -top-6 opacity-35 pointer-events-none">
+              <ScrollDoodle preset="vine" className="w-10 h-36" strokeWidth={1.5} />
+            </div>
             <p className="kicker mb-4">04 — {t('nav.pooling')}</p>
             <h2 className="display display-md mb-5">
               <span className="hl hl-blush">{t('landing.demo.pool.title')}</span>
@@ -364,8 +420,14 @@ export default function Landing() {
 
         {/* ================================================= DOES / DOES NOT */}
         <section className="relative py-24 overflow-hidden">
+          <div className="hidden lg:block absolute right-12 top-10 opacity-30 pointer-events-none doodle-float-1">
+            <Sketch kind="cloud" className="w-24 h-24" />
+          </div>
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-8">
-            <div className="sheet" data-reveal style={{ borderColor: '#1a3300' }}>
+            <div className="sheet relative" data-reveal style={{ borderColor: '#1a3300' }}>
+              <div className="absolute -top-4 -right-4 opacity-40 pointer-events-none doodle-pulse">
+                <Sketch kind="sparkle" className="w-10 h-10" />
+              </div>
               <span className="badge mb-5" style={{ background: '#d5f5c2' }}>
                 ✓ {t('landing.doesTitle')}
               </span>
@@ -380,7 +442,10 @@ export default function Landing() {
                 ))}
               </ul>
             </div>
-            <div className="sheet" data-reveal style={{ ...d(150), borderColor: '#1a3300' }}>
+            <div className="sheet relative" data-reveal style={{ ...d(150), borderColor: '#1a3300' }}>
+              <div className="absolute -top-4 -right-4 opacity-40 pointer-events-none doodle-float-2">
+                <Sketch kind="flower" className="w-10 h-10" />
+              </div>
               <span className="badge mb-5" style={{ background: '#ffd6e3' }}>
                 ✕ {t('landing.doesNotTitle')}
               </span>

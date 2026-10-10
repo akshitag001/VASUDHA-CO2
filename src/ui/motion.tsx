@@ -521,7 +521,15 @@ export function Preloader() {
 /* ---------------------------------------------------------------- brand */
 
 /** Monoline doodle used as atmospheric texture (forest ink, low opacity). */
-export function Sketch({ kind, className = '', style }: { kind: 'leaf' | 'swirl' | 'sun' | 'arrow' | 'stars'; className?: string; style?: CSSProperties }) {
+export function Sketch({
+  kind,
+  className = '',
+  style,
+}: {
+  kind: 'leaf' | 'swirl' | 'sun' | 'arrow' | 'stars' | 'sprout' | 'sparkle' | 'wind' | 'butterfly' | 'loop' | 'flower' | 'cloud' | 'curved-arrow' | 'spiral'
+  className?: string
+  style?: CSSProperties
+}) {
   const p = { fill: 'none', stroke: '#1a3300', strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
   return (
     <svg viewBox="0 0 120 120" className={className} style={style} aria-hidden="true">
@@ -559,7 +567,138 @@ export function Sketch({ kind, className = '', style }: { kind: 'leaf' | 'swirl'
           <path d="M44 88 l 2 6 l 6 2 l -6 2 l -2 6 l -2 -6 l -6 -2 l 6 -2 z" />
         </g>
       )}
+      {kind === 'sprout' && (
+        <g {...p}>
+          <path d="M60 108 C 60 76, 58 60, 60 42" strokeWidth={1.8} />
+          <path d="M60 56 C 44 44, 28 48, 24 34 C 38 28, 54 40, 60 56 Z" />
+          <path d="M60 46 C 72 34, 94 38, 96 24 C 82 20, 68 34, 60 46 Z" />
+          <path d="M48 104 Q 60 112 72 104" />
+        </g>
+      )}
+      {kind === 'sparkle' && (
+        <g {...p}>
+          <path d="M60 14 C 60 46, 74 60, 106 60 C 74 60, 60 74, 60 106 C 60 74, 46 60, 14 60 C 46 60, 60 46, 60 14 Z" />
+          <circle cx="86" cy="34" r="2.5" fill="#1a3300" />
+          <circle cx="34" cy="86" r="2" fill="#1a3300" />
+        </g>
+      )}
+      {kind === 'wind' && (
+        <g {...p}>
+          <path d="M12 48 C 42 48, 72 40, 86 44 C 98 48, 106 58, 96 66 C 86 73, 76 60, 84 52" />
+          <path d="M24 72 C 46 72, 66 68, 76 70 C 88 72, 94 82, 84 88 C 76 92, 68 82, 75 75" />
+          <path d="M38 28 C 52 28, 76 24, 88 26" />
+        </g>
+      )}
+      {kind === 'butterfly' && (
+        <g {...p}>
+          <path d="M60 44 Q 60 72 60 84" strokeWidth={2} />
+          <path d="M60 50 C 42 22, 12 34, 24 62 C 34 74, 52 62, 60 60" />
+          <path d="M60 50 C 78 22, 108 34, 96 62 C 86 74, 68 62, 60 60" />
+          <path d="M60 60 C 46 62, 32 80, 44 92 C 54 96, 58 76, 60 70" />
+          <path d="M60 60 C 74 62, 88 80, 76 92 C 66 96, 62 76, 60 70" />
+          <path d="M57 44 C 52 36, 44 34, 42 36 M 63 44 C 68 36, 76 34, 78 36" />
+        </g>
+      )}
+      {kind === 'loop' && (
+        <g {...p}>
+          <path d="M12 82 C 42 82, 52 18, 70 18 C 88 18, 88 86, 62 86 C 42 86, 46 44, 108 44" />
+        </g>
+      )}
+      {kind === 'flower' && (
+        <g {...p}>
+          <circle cx="60" cy="60" r="10" />
+          <path d="M60 50 C 52 30, 68 30, 60 50 Z" />
+          <path d="M69 55 C 89 44, 97 60, 70 62 Z" />
+          <path d="M68 67 C 88 78, 76 94, 62 70 Z" />
+          <path d="M52 68 C 36 88, 22 74, 50 63 Z" />
+          <path d="M51 55 C 31 44, 38 28, 58 50 Z" />
+        </g>
+      )}
+      {kind === 'cloud' && (
+        <g {...p}>
+          <path d="M26 78 C 14 78, 12 66, 20 58 C 18 44, 32 36, 44 42 C 52 28, 76 26, 86 38 C 98 36, 108 46, 104 58 C 114 66, 108 78, 96 78 Z" />
+        </g>
+      )}
+      {kind === 'curved-arrow' && (
+        <g {...p}>
+          <path d="M18 24 C 58 14, 98 30, 92 78 C 88 98, 62 102, 50 90 C 38 78, 48 58, 70 56 C 92 54, 102 72, 106 86" />
+          <path d="M94 84 L 106 88 L 105 74" />
+        </g>
+      )}
+      {kind === 'spiral' && (
+        <g {...p}>
+          <path d="M60 60 C 60 55, 65 54, 66 58 C 68 66, 54 68, 50 60 C 45 49, 65 42, 74 54 C 84 68, 58 80, 44 68 C 30 52, 56 32, 78 44 C 98 60, 80 92, 50 90" />
+        </g>
+      )}
     </svg>
+  )
+}
+
+export const SCROLL_DOODLE_PRESETS = {
+  'swoop-down': {
+    viewBox: '0 0 200 120',
+    path: 'M 10 20 C 70 15, 110 50, 100 80 C 95 95, 80 95, 82 85 C 85 70, 115 65, 180 95',
+  },
+  'connector-s': {
+    viewBox: '0 0 80 200',
+    path: 'M 40 10 C 10 60, 70 90, 40 140 C 20 170, 50 190, 40 195',
+  },
+  'loop-line': {
+    viewBox: '0 0 300 60',
+    path: 'M 10 30 C 60 30, 90 10, 120 10 C 145 10, 145 50, 120 50 C 95 50, 110 20, 160 25 C 210 30, 240 45, 290 30',
+  },
+  vine: {
+    viewBox: '0 0 100 240',
+    path: 'M 50 10 C 35 45, 65 75, 48 115 C 32 155, 62 185, 50 230 M 42 55 C 30 50, 26 40, 32 35 C 38 35, 44 45, 42 55 M 58 95 C 70 90, 74 80, 68 75 C 62 75, 56 85, 58 95 M 40 135 C 28 130, 24 120, 30 115 C 36 115, 42 125, 40 135 M 60 175 C 72 170, 76 160, 70 155 C 64 155, 58 165, 60 175',
+  },
+  'curly-bracket': {
+    viewBox: '0 0 40 160',
+    path: 'M 30 10 C 15 10, 12 35, 12 60 C 12 75, 5 80, 2 80 C 5 80, 12 85, 12 100 C 12 125, 15 150, 30 150',
+  },
+} as const
+
+export type ScrollDoodlePreset = keyof typeof SCROLL_DOODLE_PRESETS
+
+/** Hand-drawn SVG doodle or line that progressively draws itself with scroll progress. */
+export function ScrollDoodle({
+  path,
+  preset,
+  viewBox,
+  className = '',
+  style,
+  stroke = '#1a3300',
+  strokeWidth = 1.6,
+  dashed = false,
+}: {
+  path?: string
+  preset?: ScrollDoodlePreset
+  viewBox?: string
+  className?: string
+  style?: CSSProperties
+  stroke?: string
+  strokeWidth?: number
+  dashed?: boolean
+}) {
+  const ref = useProgress<HTMLDivElement>('through')
+  const def = preset ? SCROLL_DOODLE_PRESETS[preset] : null
+  const d = path ?? def?.path ?? ''
+  const vb = viewBox ?? def?.viewBox ?? '0 0 100 100'
+
+  return (
+    <div ref={ref} className={`scroll-doodle no-print ${className}`} style={style} aria-hidden="true">
+      <svg viewBox={vb} className="w-full h-full overflow-visible">
+        <path
+          d={d}
+          pathLength={1}
+          fill="none"
+          stroke={stroke}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={dashed ? 'is-dashed' : undefined}
+        />
+      </svg>
+    </div>
   )
 }
 
