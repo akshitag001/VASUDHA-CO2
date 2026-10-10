@@ -1,17 +1,10 @@
-<<<<<<< HEAD
 import { lazy, Suspense, useEffect, type ReactNode } from 'react'
-=======
-import { lazy, Suspense, type ReactNode } from 'react'
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppProvider, useApp } from './state/AppState'
 import ErrorBoundary from './ui/ErrorBoundary'
 import Layout, { RequireVillage } from './ui/Layout'
 import Landing from './pages/Landing'
-<<<<<<< HEAD
 import { Cursor, preloadArt, ScrollProgress, useReveal, useScrollVar } from './ui/motion'
-=======
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
 
 // Every page except the landing page is code-split so the first load stays small.
 const Select = lazy(() => import('./pages/Select'))
@@ -28,7 +21,6 @@ const DataSources = lazy(() => import('./pages/DataSources'))
 const Guide = lazy(() => import('./pages/Guide'))
 const About = lazy(() => import('./pages/About'))
 
-<<<<<<< HEAD
 // Page-wide scroll motion: parallax offset, progress bar, reveal-on-scroll.
 function Motion() {
   useScrollVar()
@@ -54,14 +46,6 @@ function Loading() {
       <span className="inline-block w-8 h-8 rounded-full border-2 border-ink spin-slow" style={{ borderTopColor: '#ffe95c', animationDuration: '0.9s' }} aria-hidden="true" />
       <span className="kicker">{t('app.loading')}</span>
     </div>
-=======
-function Loading() {
-  const { t } = useApp()
-  return (
-    <p className="muted py-10" role="status">
-      {t('app.loading')}
-    </p>
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
   )
 }
 
@@ -96,10 +80,7 @@ export default function App() {
     <ErrorBoundary>
       <BrowserRouter>
         <AppProvider>
-<<<<<<< HEAD
           <Motion />
-=======
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/select" element={open(<Select />)} />

@@ -7,11 +7,7 @@ export default function About() {
   const { t } = useApp()
   return (
     <article className="max-w-3xl">
-<<<<<<< HEAD
       <PageHeader kicker={t('about.kicker')} title={t('about.title')} lede={t('about.p1')} art="gram-sabha" artWide />
-=======
-      <PageHeader kicker={t('about.kicker')} title={t('about.title')} lede={t('about.p1')} />
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
       <p className="text-ink-2">{t('about.p2')}</p>
 
       <section className="section">

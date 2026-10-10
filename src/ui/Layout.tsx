@@ -2,10 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, NavLink, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { LANGS, type TKey } from '../i18n'
 import { useApp } from '../state/AppState'
-<<<<<<< HEAD
 import { Art, Logo, Sketch, useScrolled } from './motion'
-=======
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
 
 const WORK_NAV: [string, TKey][] = [
   ['/overview', 'nav.overview'],
@@ -28,11 +25,7 @@ const REF_NAV: [string, TKey][] = [
 export function LangSwitch() {
   const { lang, setLang, t } = useApp()
   return (
-<<<<<<< HEAD
     <div role="group" aria-label={t('app.language')} className="seg flex-nowrap" style={{ gap: '0.25rem' }}>
-=======
-    <div role="group" aria-label={t('app.language')} className="seg flex-nowrap">
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
       {LANGS.map((l) => (
         <button
           key={l.code}
@@ -41,13 +34,8 @@ export function LangSwitch() {
           aria-pressed={lang === l.code}
           aria-label={l.name}
           onClick={() => setLang(l.code)}
-<<<<<<< HEAD
           className="text-sm"
           style={{ minHeight: '2.2rem', padding: '0.25rem 0.7rem' }}
-=======
-          className="px-3 min-h-[2.4rem] text-sm"
-          style={lang === l.code ? { background: '#1b1a17', color: '#f6f2ea', fontWeight: 600 } : { background: 'transparent' }}
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
         >
           {l.label}
         </button>
@@ -58,7 +46,6 @@ export function LangSwitch() {
 
 function Toc({ onNavigate }: { onNavigate?: () => void }) {
   const { t, village } = useApp()
-<<<<<<< HEAD
   const loc = useLocation()
   const idx = WORK_NAV.findIndex(([to]) => to === loc.pathname)
   return (
@@ -69,29 +56,16 @@ function Toc({ onNavigate }: { onNavigate?: () => void }) {
           <div className="h-full bg-ink rounded-full transition-all duration-700" style={{ width: `${((idx + 1) / WORK_NAV.length) * 100}%` }} />
         </div>
       )}
-=======
-  return (
-    <nav aria-label={t('nav.groupWork')} className="toc">
-      <p className="kicker px-3 mt-2 mb-1">{t('nav.groupWork')}</p>
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
       <ul>
         {WORK_NAV.map(([to, key], i) => (
           <li key={to}>
             {village ? (
-<<<<<<< HEAD
               <NavLink to={to} viewTransition onClick={onNavigate}>
-=======
-              <NavLink to={to} onClick={onNavigate}>
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
                 <span className="n">{String(i + 1).padStart(2, '0')}</span>
                 <span>{t(key)}</span>
               </NavLink>
             ) : (
-<<<<<<< HEAD
               <span className="flex gap-3 items-center px-4 py-2 muted" aria-disabled="true">
-=======
-              <span className="flex gap-3 px-3 py-2 muted" aria-disabled="true">
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
                 <span className="n">{String(i + 1).padStart(2, '0')}</span>
                 {t(key)}
               </span>
@@ -99,21 +73,12 @@ function Toc({ onNavigate }: { onNavigate?: () => void }) {
           </li>
         ))}
       </ul>
-<<<<<<< HEAD
       <p className="kicker px-4 mt-7 mb-2">{t('nav.groupRef')}</p>
       <ul>
         {REF_NAV.map(([to, key]) => (
           <li key={to}>
             <NavLink to={to} viewTransition onClick={onNavigate}>
               <span className="n">✦</span>
-=======
-      <p className="kicker px-3 mt-6 mb-1">{t('nav.groupRef')}</p>
-      <ul>
-        {REF_NAV.map(([to, key]) => (
-          <li key={to}>
-            <NavLink to={to} onClick={onNavigate}>
-              <span className="n">·</span>
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
               <span>{t(key)}</span>
             </NavLink>
           </li>
@@ -154,7 +119,6 @@ function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 lg:hidden">
-<<<<<<< HEAD
       <div
         className="absolute inset-0"
         style={{ background: 'rgba(26,51,0,0.25)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
@@ -172,13 +136,6 @@ function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
         <div className="flex justify-between items-center p-3 border-b border-rule">
           <Logo />
           <button type="button" className="btn btn-ghost" style={{ minHeight: '2.3rem', padding: '0.3rem 0.8rem' }} onClick={onClose}>
-=======
-      <div className="absolute inset-0" style={{ background: 'rgba(27,26,23,0.45)' }} onClick={onClose} aria-hidden="true" />
-      <div ref={ref} role="dialog" aria-modal="true" aria-label={t('app.menu')} className="absolute left-0 top-0 bottom-0 w-[85vw] max-w-xs bg-paper-2 overflow-y-auto border-r border-rule">
-        <div className="flex justify-between items-center p-3 border-b border-rule">
-          <span className="serif text-lg">{t('app.name')}</span>
-          <button type="button" className="btn btn-ghost" onClick={onClose}>
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
             {t('app.close')}
           </button>
         </div>
@@ -208,10 +165,7 @@ export default function Layout() {
   const [open, setOpen] = useState(false)
   const loc = useLocation()
   const mainRef = useRef<HTMLElement>(null)
-<<<<<<< HEAD
   const scrolled = useScrolled(8)
-=======
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -224,7 +178,6 @@ export default function Layout() {
       <a href="#main" className="skip-link">
         {t('app.skip')}
       </a>
-<<<<<<< HEAD
 
       {/* Glass top bar */}
       <header className="no-print sticky top-0 z-40 px-2 sm:px-3 pt-2">
@@ -244,18 +197,6 @@ export default function Layout() {
           {village && (
             <div className="hidden md:flex items-center gap-2 ml-2 pl-4 border-l border-rule min-w-0">
               <span className="inline-block w-2 h-2 rounded-full bg-ink shrink-0" aria-hidden="true" style={{ boxShadow: '0 0 0 4px #d5f5c2' }} />
-=======
-      <header className="no-print border-b border-ink bg-paper sticky top-0 z-40">
-        <div className="flex items-center gap-3 px-4 lg:px-6 min-h-[3.75rem] py-2">
-          <button type="button" className="btn btn-ghost lg:hidden" aria-expanded={open} onClick={() => setOpen(true)}>
-            ☰ <span className="sr-only sm:not-sr-only">{t('app.menu')}</span>
-          </button>
-          <Link to="/" className="serif text-xl no-underline text-ink shrink-0" style={{ textDecoration: 'none' }}>
-            VASUDHA <span className="figure">CO₂</span>
-          </Link>
-          {village && (
-            <div className="hidden md:flex items-center gap-2 border-l border-rule pl-3 min-w-0">
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
               <span className="font-semibold truncate">{lang === 'hi' ? village.nameHi : village.name}</span>
               {place && <span className="small muted truncate">{place}</span>}
               <VillageBadge />
@@ -263,13 +204,8 @@ export default function Layout() {
           )}
           <div className="ml-auto flex items-center gap-3">
             {village && (
-<<<<<<< HEAD
               <Link to="/select" className="nav-link hidden sm:inline-flex">
                 ↺ {t('app.changeVillage')}
-=======
-              <Link to="/select" className="small hidden sm:inline">
-                {t('app.changeVillage')}
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
               </Link>
             )}
             <div className="hidden lg:block">
@@ -278,7 +214,6 @@ export default function Layout() {
           </div>
         </div>
       </header>
-<<<<<<< HEAD
 
       <Drawer open={open} onClose={() => setOpen(false)} />
 
@@ -326,27 +261,6 @@ export default function Layout() {
               <Link to="/data" style={{ color: '#fcfaf5' }}>
                 {t('nav.data')}
               </Link>
-=======
-      <Drawer open={open} onClose={() => setOpen(false)} />
-      <div className="lg:grid lg:grid-cols-[15.5rem_1fr]">
-        <aside className="hidden lg:block no-print border-r border-rule bg-paper-2 min-h-[calc(100vh-3.75rem)]">
-          <div className="sticky top-[3.75rem] py-4 max-h-[calc(100vh-3.75rem)] overflow-y-auto">
-            <Toc />
-          </div>
-        </aside>
-        <div className="min-w-0">
-          <main id="main" ref={mainRef} tabIndex={-1} className="print-root px-4 sm:px-6 lg:px-10 py-8 max-w-[62rem] outline-none">
-            <Outlet />
-          </main>
-          <footer className="no-print px-4 sm:px-6 lg:px-10 py-6 border-t border-rule max-w-[62rem] small muted">
-            <p className="text-ink-2 mb-2">
-              <strong>{t('app.disclaimer')}</strong>
-            </p>
-            <p className="flex flex-wrap gap-x-4 gap-y-1">
-              <Link to="/guide">{t('app.howToRead')}</Link>
-              <Link to="/assumptions">{t('nav.assumptions')}</Link>
-              <Link to="/data">{t('nav.data')}</Link>
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
               <span>{t('app.footer')}</span>
             </p>
           </footer>

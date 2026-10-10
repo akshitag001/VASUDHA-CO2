@@ -41,11 +41,7 @@ export default function Money() {
 
   return (
     <article>
-<<<<<<< HEAD
       <PageHeader kicker={t('money.kicker')} title={t('money.title')} lede={t('money.lede')} step={[4, 8]} art="money" />
-=======
-      <PageHeader kicker={t('money.kicker')} title={t('money.title')} lede={t('money.lede')} step={[4, 8]} />
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
 
       <section className="grid sm:grid-cols-2 gap-4" aria-live="polite">
         <Stat label={t('money.headline')} value={inrRange(net, lang)} tone={net.mid < 0 ? 'neg' : undefined}>

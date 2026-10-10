@@ -530,7 +530,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
         </svg>
       </span>
       {!compact && (
-        <span className="font-bold text-[1.15rem] tracking-tight text-ink" style={{ fontFamily: 'var(--font-sans)' }}>
+        <span className="logo-word font-bold text-[1.15rem] tracking-tight text-ink" style={{ fontFamily: 'var(--font-sans)' }}>
           VASUDHA<span className="figure ml-1 text-[0.85em]">CO₂</span>
         </span>
       )}

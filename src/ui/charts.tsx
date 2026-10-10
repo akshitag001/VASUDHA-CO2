@@ -31,21 +31,12 @@ export function RangeStrip({
       role="img"
       aria-label={`${label}: ${format(lo)} – ${format(hi)}, ${format(range.mid)}`}
     >
-<<<<<<< HEAD
       <rect x="0" y="6" width="100" height="2" fill="#ece5d3" />
       {crossesZero && <rect x={x(0) - 0.2} y="0" width="0.4" height="14" fill="#1a3300" />}
       {lo < 0 && <rect x={x(lo)} y="3" width={Math.max(0.8, x(Math.min(0, hi)) - x(lo))} height="8" fill="#cb5521" />}
       {hi > 0 && <rect x={x(Math.max(0, lo))} y="3" width={Math.max(0.8, x(hi) - x(Math.max(0, lo)))} height="8" fill="#1d5c58" />}
       {crossesZero && <rect x={x(0) - 0.3} y="0" width="0.6" height="14" fill="#fffefa" />}
       <rect x={x(range.mid) - 0.5} y="1" width="1" height="12" fill="#1a3300" />
-=======
-      <rect x="0" y="6" width="100" height="2" fill="#e6dfd0" />
-      {crossesZero && <rect x={x(0) - 0.2} y="0" width="0.4" height="14" fill="#1b1a17" />}
-      {lo < 0 && <rect x={x(lo)} y="3" width={Math.max(0.8, x(Math.min(0, hi)) - x(lo))} height="8" fill="#b04a2a" />}
-      {hi > 0 && <rect x={x(Math.max(0, lo))} y="3" width={Math.max(0.8, x(hi) - x(Math.max(0, lo)))} height="8" fill="#3f63a8" />}
-      {crossesZero && <rect x={x(0) - 0.3} y="0" width="0.6" height="14" fill="#fffdf8" />}
-      <rect x={x(range.mid) - 0.5} y="1" width="1" height="12" fill="#1b1a17" />
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
     </svg>
   )
 }
@@ -104,17 +95,10 @@ export function Tornado({
             >
               <span className="text-right small font-semibold leading-tight">{b.label}</span>
               <svg viewBox="0 0 100 10" preserveAspectRatio="none" className="w-full h-6 block">
-<<<<<<< HEAD
                 {d0 < 0 && d1 > 0 && <rect x={x(0) - 0.1} y="0" width="0.2" height="10" fill="#c9c1ab" />}
                 {leftEnd < base && <rect x={x(leftEnd)} y="1" width={Math.max(0.3, x(base) - x(leftEnd) - 0.3)} height="8" fill="#cb5521" />}
                 {rightEnd > base && <rect x={x(base) + 0.3} y="1" width={Math.max(0.3, x(rightEnd) - x(base) - 0.3)} height="8" fill="#1d5c58" />}
                 <rect x={x(base) - 0.15} y="0" width="0.3" height="10" fill="#1a3300" />
-=======
-                {d0 < 0 && d1 > 0 && <rect x={x(0) - 0.1} y="0" width="0.2" height="10" fill="#b9ae98" />}
-                {leftEnd < base && <rect x={x(leftEnd)} y="1" width={Math.max(0.3, x(base) - x(leftEnd) - 0.3)} height="8" fill="#b04a2a" />}
-                {rightEnd > base && <rect x={x(base) + 0.3} y="1" width={Math.max(0.3, x(rightEnd) - x(base) - 0.3)} height="8" fill="#3f63a8" />}
-                <rect x={x(base) - 0.15} y="0" width="0.3" height="10" fill="#1b1a17" />
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
               </svg>
             </li>
           )
@@ -137,17 +121,10 @@ export function Tornado({
       </p>
       <p className="small muted flex flex-wrap gap-4" aria-hidden="true">
         <span className="inline-flex items-center gap-1.5">
-<<<<<<< HEAD
           <span style={{ width: 14, height: 10, background: '#cb5521', display: 'inline-block', borderRadius: 2 }} /> {legend[0]}
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span style={{ width: 14, height: 10, background: '#1d5c58', display: 'inline-block', borderRadius: 2 }} /> {legend[1]}
-=======
-          <span style={{ width: 14, height: 10, background: '#b04a2a', display: 'inline-block', borderRadius: 2 }} /> {legend[0]}
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <span style={{ width: 14, height: 10, background: '#3f63a8', display: 'inline-block', borderRadius: 2 }} /> {legend[1]}
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
         </span>
       </p>
     </div>

@@ -1,14 +1,9 @@
-<<<<<<< HEAD
 import { useId, useState, type CSSProperties, type ReactNode } from 'react'
-=======
-import { useId, useState, type ReactNode } from 'react'
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
 import { Link } from 'react-router-dom'
 import { ASSUMPTIONS, type AssumptionId } from '../config/assumptions'
 import type { OverallVerdict } from '../engine'
 import type { TKey } from '../i18n'
 import { useApp } from '../state/AppState'
-<<<<<<< HEAD
 import { Art, type ArtName } from './motion'
 import { Prov } from './Prov'
 
@@ -45,20 +40,6 @@ export function PageHeader({
       </div>
       {art && !artWide && <Art name={art} eager className="hidden md:block w-full max-w-[15rem] art-pop" />}
       {art && artWide && <Art name={art} eager className="w-full max-h-[16rem] object-contain object-left mt-6 art-pop" />}
-=======
-import { Prov } from './Prov'
-
-export function PageHeader({ kicker, title, lede, step }: { kicker: string; title: string; lede?: ReactNode; step?: [number, number] }) {
-  const { t } = useApp()
-  return (
-    <header className="mb-8">
-      <p className="kicker mb-2">
-        {step ? `${t('app.step', { n: step[0], total: step[1] })} · ` : ''}
-        {kicker}
-      </p>
-      <h1 className="text-3xl sm:text-4xl mb-3">{title}</h1>
-      {lede && <p className="lede">{lede}</p>}
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
     </header>
   )
 }
@@ -70,7 +51,6 @@ export function AsmTag({ id, changed }: { id: AssumptionId; changed?: boolean })
   return <Prov kind="assumption" source={a.source} year={a.year} verified={a.verified} url={a.url} />
 }
 
-<<<<<<< HEAD
 const STAT_CAPS = ['#ffe95c', '#a8e5e5', '#f6d0ff', '#d5f5c2', '#ffdcc2']
 let statSeq = 0
 
@@ -80,12 +60,6 @@ export function Stat({ label, value, sub, tone, children }: { label: string; val
   return (
     <div className="sheet stat flex flex-col gap-1 pt-6" style={{ '--tone': cap } as CSSProperties}>
       <div className="kicker">{label}</div>
-=======
-export function Stat({ label, value, sub, tone, children }: { label: string; value: ReactNode; sub?: ReactNode; tone?: 'neg' | 'pos'; children?: ReactNode }) {
-  return (
-    <div className="sheet flex flex-col gap-1">
-      <div className="small muted font-semibold">{label}</div>
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
       <div className={`figure-xl ${tone ?? ''}`}>{value}</div>
       {sub && <div className="small muted">{sub}</div>}
       {children}
@@ -127,11 +101,7 @@ export function Seg<V extends string>({
   const name = useId()
   return (
     <fieldset>
-<<<<<<< HEAD
       <legend className="label mb-2">{legend}</legend>
-=======
-      <legend className="label">{legend}</legend>
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
       <div className="seg" role="radiogroup">
         {options.map((o) => (
           <label key={o.value}>
@@ -258,24 +228,15 @@ export function PageNav({ prev, next }: { prev?: [string, TKey]; next?: [string,
   return (
     <nav className="section flex flex-wrap justify-between gap-3 no-print" aria-label="Page">
       {prev ? (
-<<<<<<< HEAD
         <Link to={prev[0]} viewTransition className="btn btn-ghost">
-=======
-        <Link to={prev[0]} className="btn btn-ghost">
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
           ← {t(prev[1])}
         </Link>
       ) : (
         <span />
       )}
       {next && (
-<<<<<<< HEAD
         <Link to={next[0]} viewTransition data-magnetic className="btn btn-lg">
           {t('app.next')}: {t(next[1])} <span className="arr">→</span>
-=======
-        <Link to={next[0]} className="btn">
-          {t('app.next')}: {t(next[1])} →
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
         </Link>
       )}
     </nav>

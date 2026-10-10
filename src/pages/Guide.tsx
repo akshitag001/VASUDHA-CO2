@@ -14,11 +14,7 @@ export default function Guide() {
   ]
   return (
     <article>
-<<<<<<< HEAD
       <PageHeader kicker={t('guide.kicker')} title={t('guide.title')} lede={t('guide.lede')} art="select-corner" />
-=======
-      <PageHeader kicker={t('guide.kicker')} title={t('guide.title')} lede={t('guide.lede')} />
->>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
       <div className="grid gap-6 max-w-3xl">
         {ideas.map(([h, p]) => (
           <section key={h} className="border-l-4 border-ink pl-5">
