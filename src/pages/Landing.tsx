@@ -163,7 +163,7 @@ export default function Landing() {
               <SplitWords text={h1} mark={[lastWord]} />
             </h1>
             <p className="lede mx-auto mb-10 text-center" data-reveal style={d(450)}>
-              {t('landing.lede')}
+              {t('app.tagline')}
             </p>
             <div className="flex flex-wrap justify-center gap-3" data-reveal style={d(600)}>
               <Link to="/select" viewTransition data-magnetic className="btn btn-lg">
@@ -181,9 +181,9 @@ export default function Landing() {
             </div>
           </div>
 
-          <div className="relative mt-6 md:-mt-[6vw] pointer-events-none">
+          <div id="statement" className="relative mt-12 md:-mt-[6vw] scroll-mt-24">
             {/* Inline 2 KB blurred sketch shows instantly; the real drawing fades over it once decoded. */}
-            <div className="hero-land" style={{ '--lqip': `url(${HERO_LQIP})` } as CSSProperties}>
+            <div className="hero-land pointer-events-none" style={{ '--lqip': `url(${HERO_LQIP})` } as CSSProperties}>
               <img
                 ref={heroImg}
                 onLoad={markHeroLoaded}
@@ -198,20 +198,24 @@ export default function Landing() {
                 fetchPriority="high"
               />
             </div>
+
+            {/* Text centered inside the box area of the landscape illustration */}
+            <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8 md:p-10 pointer-events-auto">
+              <div className="max-w-2xl lg:max-w-3xl mx-auto px-4 text-center -translate-y-3 sm:-translate-y-6 md:-translate-y-10" data-reveal>
+                <ScrollText
+                  text={t('landing.lede')}
+                  className="font-semibold text-ink text-center mx-auto text-[clamp(1rem,2.1vw,2.05rem)] leading-[1.35] tracking-[-0.015em]"
+                />
+                <div className="flex justify-center mt-3 sm:mt-6">
+                  <Sketch kind="arrow" className="w-14 sm:w-20 hidden md:block" style={{ opacity: 0.35 }} />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="hidden 2xl:block absolute right-8 top-40" aria-hidden="true">
             <SpinBadge text="Screen ✦ Check ✦ Decide ✦ Sign wisely ✦ ">🌱</SpinBadge>
           </div>
-        </section>
-
-        {/* ================================================= STATEMENT (words ink in on scroll) */}
-        <section id="statement" className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-16 pb-24 sm:pb-32 scroll-mt-24">
-          <p className="kicker mb-8" data-reveal>
-            ✦ {t('app.tagline')}
-          </p>
-          <ScrollText text={t('landing.lede')} className="font-semibold text-[clamp(1.65rem,3.6vw,3.1rem)] leading-[1.2] tracking-[-0.015em]" />
-          <Sketch kind="arrow" className="absolute right-4 -bottom-2 w-24 hidden md:block" style={{ opacity: 0.3 }} />
         </section>
 
         {/* ================================================= CROSSING TAPES */}
