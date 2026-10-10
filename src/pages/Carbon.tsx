@@ -91,7 +91,11 @@ export default function Carbon() {
 
   return (
     <article>
+<<<<<<< HEAD
       <PageHeader kicker={t('carbon.kicker')} title={t('carbon.title')} lede={t('carbon.lede')} step={[2, 8]} art="soil-carbon" />
+=======
+      <PageHeader kicker={t('carbon.kicker')} title={t('carbon.title')} lede={t('carbon.lede')} step={[2, 8]} />
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
       <ProvLegend />
 
       <section className="section">

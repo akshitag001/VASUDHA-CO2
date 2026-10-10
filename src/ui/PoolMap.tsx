@@ -51,9 +51,15 @@ export default function PoolMap({ center, neighbours, selected, radiusKm, onTogg
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
     m.on('load', () => {
       m.addSource('radius', { type: 'geojson', data: circle(center.lat, center.lon, radiusKm) })
+<<<<<<< HEAD
       m.addLayer({ id: 'radius', type: 'line', source: 'radius', paint: { 'line-color': '#1a3300', 'line-width': 1.2, 'line-dasharray': [3, 3] } })
       m.addSource('links', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
       m.addLayer({ id: 'links', type: 'line', source: 'links', paint: { 'line-color': '#1d5c58', 'line-width': 2.5 } })
+=======
+      m.addLayer({ id: 'radius', type: 'line', source: 'radius', paint: { 'line-color': '#1b1a17', 'line-width': 1.2, 'line-dasharray': [3, 3] } })
+      m.addSource('links', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
+      m.addLayer({ id: 'links', type: 'line', source: 'links', paint: { 'line-color': '#2c4a8a', 'line-width': 2.5 } })
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
       setLoaded(true)
     })
     map.current = m
@@ -72,7 +78,11 @@ export default function PoolMap({ center, neighbours, selected, radiusKm, onTogg
       markers.current = []
       const hub = document.createElement('div')
       hub.setAttribute('aria-hidden', 'true')
+<<<<<<< HEAD
       hub.style.cssText = 'width:20px;height:20px;background:#1a3300;border:3px solid #fffefa;transform:rotate(45deg)'
+=======
+      hub.style.cssText = 'width:20px;height:20px;background:#1b1a17;border:3px solid #fffdf8;transform:rotate(45deg)'
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
       markers.current.push(new maplibregl.Marker({ element: hub }).setLngLat([center.lon, center.lat]).addTo(m))
       for (const n of neighbours) {
         const on = selected.includes(n.lgdCode)
@@ -81,7 +91,11 @@ export default function PoolMap({ center, neighbours, selected, radiusKm, onTogg
         b.setAttribute('aria-pressed', String(on))
         b.setAttribute('aria-label', `${n.name}, ${n.distanceKm.toFixed(1)} km`)
         b.title = `${n.name} · ${n.distanceKm.toFixed(1)} km`
+<<<<<<< HEAD
         b.style.cssText = `width:22px;height:22px;border-radius:50%;cursor:pointer;border:2.5px solid #1a3300;background:${on ? '#1d5c58' : '#fffefa'};box-shadow:0 0 0 2px #fffefa`
+=======
+        b.style.cssText = `width:22px;height:22px;border-radius:50%;cursor:pointer;border:2.5px solid #1b1a17;background:${on ? '#2c4a8a' : '#fffdf8'};box-shadow:0 0 0 2px #fffdf8`
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
         b.addEventListener('click', (e) => {
           e.stopPropagation()
           toggle.current(n.lgdCode)

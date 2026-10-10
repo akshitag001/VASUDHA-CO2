@@ -47,7 +47,11 @@ export default function Pooling() {
 
   return (
     <article>
+<<<<<<< HEAD
       <PageHeader kicker={t('pool.kicker')} title={t('pool.title')} lede={t('pool.lede')} step={[6, 8]} art="pooling" artWide />
+=======
+      <PageHeader kicker={t('pool.kicker')} title={t('pool.title')} lede={t('pool.lede')} step={[6, 8]} />
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
 
       {!hasCoords ? (
         <Callout kind="warn">{t('pool.noCoords')}</Callout>

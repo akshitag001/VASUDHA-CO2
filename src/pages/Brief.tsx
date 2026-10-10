@@ -48,7 +48,11 @@ export default function Brief() {
   const place = [village.block, village.district, village.state].filter(Boolean).join(', ')
   const date = new Date().toLocaleDateString(`${lang}-IN`, { day: 'numeric', month: 'long', year: 'numeric' })
   const exitKey: TKey = usingOffer ? (`brief.exit.${offer.exit}` as TKey) : 'brief.exit.unknown'
+<<<<<<< HEAD
   const neg = (x: number) => (x < 0 ? '#a8441a' : '#1a3300')
+=======
+  const neg = (x: number) => (x < 0 ? '#9a3a1f' : '#1b1a17')
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
 
   const download = async () => {
     if (!ref.current) return
@@ -66,7 +70,11 @@ export default function Brief() {
   return (
     <article>
       <div className="no-print">
+<<<<<<< HEAD
         <PageHeader kicker={tApp('brief.kicker')} title={tApp('brief.title')} lede={tApp('brief.lede')} step={[8, 8]} art="gram-sabha" artWide />
+=======
+        <PageHeader kicker={tApp('brief.kicker')} title={tApp('brief.title')} lede={tApp('brief.lede')} step={[8, 8]} />
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
         <div className="flex flex-wrap items-end gap-4 mb-3">
           <Seg<Lang> legend={tApp('brief.lang')} value={lang} onChange={setLang} options={LANGS.map((l) => ({ value: l.code, label: l.name }))} />
           <button type="button" className="btn" onClick={() => window.print()}>
@@ -87,10 +95,17 @@ export default function Brief() {
           ref={ref}
           lang={lang}
           className="brief"
+<<<<<<< HEAD
           style={{ width: '794px', maxWidth: 'none', background: '#ffffff', color: '#1a3300', padding: '34px 38px', border: '1px solid #e2dccb', fontSize: '15px', lineHeight: 1.5 }}
         >
           <header style={{ borderBottom: '3px solid #1a3300', paddingBottom: 10, marginBottom: 14 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 12.5, color: '#3a4a28' }}>
+=======
+          style={{ width: '794px', maxWidth: 'none', background: '#ffffff', color: '#1b1a17', padding: '34px 38px', border: '1px solid #d6cdbb', fontSize: '15px', lineHeight: 1.5 }}
+        >
+          <header style={{ borderBottom: '3px solid #1b1a17', paddingBottom: 10, marginBottom: 14 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 12.5, color: '#45413a' }}>
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
               <span>VASUDHA CO₂</span>
               <span>{t('brief.date', { date })}</span>
             </div>
@@ -98,27 +113,45 @@ export default function Brief() {
             <p style={{ fontSize: 17, fontWeight: 600 }}>{t('brief.for', { name: lang === 'hi' ? village.nameHi : village.name, place })}</p>
           </header>
 
+<<<<<<< HEAD
           <section style={{ border: '2px solid #1a3300', padding: '10px 14px', marginBottom: 14 }}>
             <p style={{ fontSize: 12.5, color: '#3a4a28' }}>{t('brief.verdictPrefix')}</p>
+=======
+          <section style={{ border: '2px solid #1b1a17', padding: '10px 14px', marginBottom: 14 }}>
+            <p style={{ fontSize: 12.5, color: '#45413a' }}>{t('brief.verdictPrefix')}</p>
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
             <p style={{ fontSize: 21, fontWeight: 700, fontFamily: 'var(--font-serif)' }}>{t(`verdict.${a.verdict}.title` as TKey)}</p>
             <p>{t(`verdict.${a.verdict}.body` as TKey)}</p>
           </section>
 
           <section style={{ marginBottom: 12 }}>
             <h2 style={{ fontSize: 18, marginBottom: 6 }}>{t('brief.income')}</h2>
+<<<<<<< HEAD
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', border: '1px solid #1a3300' }}>
+=======
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', border: '1px solid #1b1a17' }}>
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
               {[
                 [t('brief.perHH'), inrRange(perHH, lang), perHH.mid],
                 [t('brief.perYear'), inrRange(net, lang), net.mid],
                 [t('brief.overContract', { n: years }), inrRange(total, lang), total.mid],
               ].map(([label, value, mid], i) => (
+<<<<<<< HEAD
                 <div key={i} style={{ padding: '8px 10px', borderLeft: i ? '1px solid #1a3300' : 'none' }}>
                   <div style={{ fontSize: 12.5, color: '#3a4a28' }}>{label}</div>
+=======
+                <div key={i} style={{ padding: '8px 10px', borderLeft: i ? '1px solid #1b1a17' : 'none' }}>
+                  <div style={{ fontSize: 12.5, color: '#45413a' }}>{label}</div>
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 500, color: neg(mid as number) }}>{value}</div>
                 </div>
               ))}
             </div>
+<<<<<<< HEAD
             <p style={{ fontSize: 12.5, color: '#3a4a28', marginTop: 4 }}>
+=======
+            <p style={{ fontSize: 12.5, color: '#45413a', marginTop: 4 }}>
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
               {t('brief.rangeNote')} {usingOffer ? t('brief.offerUsed', { date: state.offerCheckedAt ?? '', share: offer.communitySharePct, years }) : t('brief.noOffer')}
             </p>
           </section>
@@ -147,12 +180,20 @@ export default function Brief() {
             </div>
           </section>
 
+<<<<<<< HEAD
           <section style={{ background: '#fff5b8', borderLeft: '5px solid #e8c930', padding: '8px 12px', marginBottom: 12 }}>
+=======
+          <section style={{ background: '#f6e6b4', borderLeft: '5px solid #d9a21b', padding: '8px 12px', marginBottom: 12 }}>
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
             <h2 style={{ fontSize: 16, marginBottom: 4 }}>{t('brief.checklist')}</h2>
             <ol style={{ paddingLeft: 0, listStyle: 'none' }}>
               {(['brief.q1', 'brief.q2', 'brief.q3'] as TKey[]).map((k, i) => (
                 <li key={k} style={{ display: 'flex', gap: 8, marginBottom: 3 }}>
+<<<<<<< HEAD
                   <span style={{ display: 'inline-block', width: 16, height: 16, border: '1.5px solid #1a3300', flexShrink: 0, marginTop: 3 }} aria-hidden="true" />
+=======
+                  <span style={{ display: 'inline-block', width: 16, height: 16, border: '1.5px solid #1b1a17', flexShrink: 0, marginTop: 3 }} aria-hidden="true" />
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
                   <span>
                     <strong>{i + 1}.</strong> {t(k)}
                   </span>
@@ -172,11 +213,19 @@ export default function Brief() {
             <p style={{ fontWeight: 600 }}>{t('brief.womenPrompt')}</p>
           </section>
 
+<<<<<<< HEAD
           <footer style={{ borderTop: '1px solid #1a3300', paddingTop: 8, display: 'flex', gap: 14, alignItems: 'flex-start', fontSize: 12.5, color: '#3a4a28' }}>
             <div style={{ flex: 1 }}>
               <p>{t('brief.dataNote', { score: a.confidence.overall, level: t(`conf.${a.confidence.level}` as TKey) })}</p>
               {notMeasured && <p style={{ color: '#a8441a', fontWeight: 600 }}>{t('brief.illustrativeWarn')}</p>}
               <p style={{ fontWeight: 600, color: '#1a3300', marginTop: 4 }}>{t('app.disclaimer')}</p>
+=======
+          <footer style={{ borderTop: '1px solid #1b1a17', paddingTop: 8, display: 'flex', gap: 14, alignItems: 'flex-start', fontSize: 12.5, color: '#45413a' }}>
+            <div style={{ flex: 1 }}>
+              <p>{t('brief.dataNote', { score: a.confidence.overall, level: t(`conf.${a.confidence.level}` as TKey) })}</p>
+              {notMeasured && <p style={{ color: '#9a3a1f', fontWeight: 600 }}>{t('brief.illustrativeWarn')}</p>}
+              <p style={{ fontWeight: 600, color: '#1b1a17', marginTop: 4 }}>{t('app.disclaimer')}</p>
+>>>>>>> 0e2db22eb360a92caa6b2424fc0a80f3d6b2bc97
               <p style={{ marginTop: 4, wordBreak: 'break-all' }}>
                 {t('brief.link')} {window.location.origin}
               </p>
