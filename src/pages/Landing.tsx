@@ -8,6 +8,7 @@ import type { DemoId } from '../state/store'
 import { LangSwitch } from '../ui/Layout'
 import { HERO_LQIP } from '../ui/heroLqip'
 import { Ledger } from '../ui/Ledger'
+import { HeroColorizer } from '../ui/HeroColorizer'
 import { Art, Divider, Logo, Preloader, ScrollDoodle, ScrollText, Sketch, SpinBadge, SplitWords, Tilt, artUrl, useMedia, useProgress, useScrolled, type ArtName } from '../ui/motion'
 
 const DEMO_ORDER: DemoId[] = ['small', 'medium', 'pool']
@@ -193,6 +194,7 @@ export default function Landing() {
           <div id="statement" className="relative mt-12 md:-mt-[6vw] scroll-mt-24">
             {/* Inline 2 KB blurred sketch shows instantly; the real drawing fades over it once decoded. */}
             <div className="hero-land pointer-events-none" style={{ '--lqip': `url(${HERO_LQIP})` } as CSSProperties}>
+              <HeroColorizer />
               <img
                 ref={heroImg}
                 onLoad={markHeroLoaded}
@@ -202,7 +204,7 @@ export default function Landing() {
                 width={1600}
                 height={800}
                 alt=""
-                className="hero-art"
+                className="hero-art relative z-10"
                 decoding="async"
                 fetchPriority="high"
               />
